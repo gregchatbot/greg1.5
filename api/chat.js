@@ -1,36 +1,41 @@
-export default async function handler(req, res) {
-    if (req.method !== "POST") {
-        return res.status(405).json({ error: "Method Not Allowed" });
-    }
+document.addEventListener("DOMContentLoaded", function () {
+    let chatBox = document.getElementById("chat-box");
+    let chatInput = document.getElementById("chat-input");
+    
+    // Initial Greeting
+    chatBox.innerHTML += `<div class='ai-message'><strong>Greg, But AI:</strong> What's good, youngblood? Need ideas, headlines, or just wanna swap conspiracy theories about baby pigeons? Either way, I gotchu.</div>`;
 
-    try {
-        const { userMessage } = req.body;
+    chatInput.addEventListener("keypress", function (event) {
+        if (event.key === "Enter" && chatInput.value.trim() !== "") {
+            let userMessage = chatInput.value.trim();
+            chatBox.innerHTML += `<div class='user-message'>${userMessage}</div>`;
+            chatInput.value = "";
+            chatBox.scrollTop = chatBox.scrollHeight;
 
-        const response = await fetch("https://api.openai.com/v1/chat/completions", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": `Bearer ${process.env.API_KEY}`
-            },
-            body: JSON.stringify({
-                model: "gpt-4",
-                messages: [
-                    { "role": "system", "content": "You are Greg, But AI, a creative AI chatbot. Your tone is witty, humorous, and clever. Be engaging, insightful, and occasionally ridiculous. Do not repeat the opening phrase in every response." },
-                    { "role": "user", "content": userMessage }
-                ]
+            // Show loader while processing response
+            let loader = document.createElement("div");
+            loader.classList.add("ai-message");
+            loader.innerHTML = "Thinking...";
+            chatBox.appendChild(loader);
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userMessage: userMessage })
             })
-        });
-
-        const data = await response.json();
-
-        if (!data.choices || data.choices.length === 0) {
-            return res.status(500).json({ aiResponse: "Uh-oh, I think I just had a brain freeze. Try again!" });
+            .then(response => response.json())
+            .then(data => {
+                loader.remove(); // Remove loader once response is ready
+                let aiResponse = data.aiResponse || "Error: Brain lag. Try again!";
+                chatBox.innerHTML += `<div class='ai-message'><strong>Greg, But AI:</strong> ${aiResponse}</div>`;
+                chatBox.scrollTop = chatBox.scrollHeight;
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                loader.remove();
+                chatBox.innerHTML += `<div class='ai-message'><strong>Greg, But AI:</strong> Ahhh HORSESHIT! I done messed up. Let me know and I will fix it.</div>`;
+            });
         }
-
-        res.status(200).json({ aiResponse: data.choices[0].message.content });
-
-    } catch (error) {
-        console.error("Chat API Error:", error);
-        res.status(500).json({ aiResponse: "Ahhh HORSESHIT! Something went wrong. Let me know and I will fix it." });
-    }
-}
+    });
+});
