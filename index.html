@@ -3,19 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Greg, But AI</title>
+    <title>Greg, But AI 1.5</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Header with Loading Animation -->
+    <!-- Neomorphic Header with Loader -->
     <div class="header-container">
-        <div class="loader">
-            <img src="https://i.postimg.cc/5yL2gSBz/Greg-Neo-Glow-MIDDLE.png" alt="Greg's Face">
-            <span></span>
+        <div class="neomorphic-header">
+            <div class="loader">
+                <span></span>
+            </div>
+            <img src="https://i.postimg.cc/5yL2gSBz/Greg-Neo-Glow-MIDDLE.png" alt="Greg's Face" class="profile-image">
         </div>
         <h1>Greg, But AI</h1>
-        <p>Copywritin’ | Brainstormin’ | Chitchattin’</p>
+        <p class="tagline">Copywritin’ | Brainstormin’ | Chitchattin’</p>
     </div>
 
     <!-- Chat Container -->
@@ -24,84 +26,6 @@
         <input type="text" class="chat-input" id="chat-input" placeholder="Type a message...">
     </div>
 
-    <script>
-        function updateHeaderImage() {
-            const headerImg = document.getElementById('header-image');
-            if (window.innerWidth <= 768) {
-                headerImg.src = "https://i.postimg.cc/JzV2ZNKj/greg-but-ai-header-image-mobile.png";
-            } else {
-                headerImg.src = "https://i.postimg.cc/66PS5Jvj/greg-but-ai-header-image-desktop.png";
-            }
-        }
-        
-        window.onload = function () {
-            document.getElementById('chat-input').focus();
-            let chatBox = document.getElementById('chat-box');
-            chatBox.innerHTML += `<div class="ai-message"><strong>Greg, But AI:</strong> What's good, youngblood? You need headlines? Big ideas? Or are we just gonna sit here swapping conspiracy theories about why no one's ever seen baby pigeons? Either way, I gotchu.</div>`;
-        };
-
-        window.onresize = updateHeaderImage;
-
-        document.getElementById('chat-input').addEventListener('keypress', function(event) {
-            if (event.key === 'Enter' && this.value.trim() !== '') {
-                let userMessage = this.value.trim();
-                let chatBox = document.getElementById('chat-box');
-
-                let userBubble = document.createElement('div');
-                userBubble.classList.add('user-message');
-                userBubble.textContent = userMessage;
-                chatBox.appendChild(userBubble);
-                this.value = '';
-                chatBox.scrollTop = chatBox.scrollHeight;
-
-                showTypingIndicator();
-
-                fetch('/api/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userMessage: userMessage })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    hideTypingIndicator();
-                    let aiResponse = data.aiResponse || "Hmm, something went wrong. Operator error? That means you.";
-                    let aiMessage = document.createElement('div');
-                    aiMessage.classList.add('ai-message');
-                    aiMessage.innerHTML = `<strong>Greg, But AI:</strong> ` + aiResponse;
-                    chatBox.appendChild(aiMessage);
-                    chatBox.scrollTop = chatBox.scrollHeight;
-                })
-                .catch(error => {
-                    hideTypingIndicator();
-                    console.error('Error:', error);
-                    let aiMessage = document.createElement('div');
-                    aiMessage.classList.add('ai-message');
-                    aiMessage.innerHTML = `<strong>Greg, But AI:</strong> Ahhh HORSESHIT! I done messed up. Let me know and I will fix it.`;
-                    chatBox.appendChild(aiMessage);
-                });
-            }
-        });
-
-        function showTypingIndicator() {
-            let chatBox = document.getElementById('chat-box');
-            let typingIndicator = document.createElement('div');
-            typingIndicator.classList.add('typing-indicator');
-            typingIndicator.id = 'typing';
-            typingIndicator.textContent = 'Greg, But AI is thinking...';
-            chatBox.appendChild(typingIndicator);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        }
-
-        function hideTypingIndicator() {
-            let typingIndicator = document.getElementById('typing');
-            if (typingIndicator) typingIndicator.remove();
-        }
-
-        function vibrateFeedback() {
-            if ("vibrate" in navigator) {
-                navigator.vibrate(50);
-            }
-        }
-    </script>
+    <script src="chat.js"></script>
 </body>
 </html>
