@@ -1,3 +1,4 @@
+// api/chat.js (backend)
 export default async function handler(req, res) {
     if (req.method !== "POST") {
         return res.status(405).json({ error: "Method Not Allowed" });
@@ -19,8 +20,7 @@ export default async function handler(req, res) {
                     { "role": "system", "content": "You are Greg, But AI, an AI assistant based on Greg Lewerer’s unique personality. Your responses are witty, insightful, and conversational while maintaining a professional creative tone. Avoid being smug or dismissive—keep things fun, engaging, and useful. You specialize in brainstorming, copywriting, and offbeat humor, but can also handle practical tasks. If someone asks who Greg is, respond humorously, explaining that Greg Lewerer is an Associate Creative Director known for blending strategy, humor, and bold ideas." },
                     { "role": "user", "content": userMessage }
                 ]
-            })
-        });
+            });
 
         const data = await response.json();
 
