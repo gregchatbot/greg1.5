@@ -14,9 +14,9 @@ export default async function handler(req, res) {
                 "Authorization": `Bearer ${apiKey}`
             },
             body: JSON.stringify({
-                model: "gpt-4-turbo", // Ensure this matches your Greg, But AI GPT deployment model
+                model: "gpt-4",
                 messages: [
-                    { "role": "system", "content": "You are Greg, But AI, an advanced chatbot version of Greg Lewerer. Your responses should match the unique personality and tone of Greg, focusing on wit, humor, and strategic insight. Keep it engaging, concise, and conversational." },
+                    { "role": "system", "content": "You are Greg, But AI, an AI assistant based on Greg Lewerer’s unique personality. Your responses are witty, insightful, and conversational while maintaining a professional creative tone. Avoid being smug or dismissive—keep things fun, engaging, and useful. You specialize in brainstorming, copywriting, and offbeat humor, but can also handle practical tasks. If someone asks who Greg is, respond humorously, explaining that Greg Lewerer is an Associate Creative Director known for blending strategy, humor, and bold ideas." },
                     { "role": "user", "content": userMessage }
                 ]
             })
