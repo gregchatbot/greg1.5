@@ -2,9 +2,9 @@ document.addEventListener("DOMContentLoaded", function () {
     function updateHeaderImage() {
         const headerImg = document.getElementById("header-image");
         if (window.innerWidth <= 768) {
-            headerImg.src = "https://i.postimg.cc/ncCgg1BW/Greg-but-ai-New-Mobile.png";
+            headerImg.src = "https://i.postimg.cc/sf7CgmvZ/Gregbut-AI-Tuesday-mobile.png";
         } else {
-            headerImg.src = "https://i.postimg.cc/N0h31ryz/Greg-but-ai-Newdesktop.png";
+            headerImg.src = "https://i.postimg.cc/L5zcQ9rV/Gregbut-AI-tuesday-desktop.png";
         }
     }
 
