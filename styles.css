@@ -8,13 +8,12 @@ body {
     height: 100vh;
     background-color: #2e333a;
     font-family: 'Montserrat', sans-serif;
-    overflow: hidden;
+    overflow-y: auto;
 }
 
-/* Responsive Header Container */
+/* Responsive Header */
 .header-container {
     width: 100%;
-    overflow: hidden;
 }
 
 .header-container img {
@@ -92,6 +91,8 @@ body {
     background: #4a515b;
     align-self: flex-start;
     box-shadow: 4px 4px 10px rgba(0,0,0,0.3);
+    color: #FFFFFF;
+    line-height: 1.25;
 }
 
 /* Input Field & Send Button */
@@ -128,8 +129,8 @@ body {
         padding: 10px;
         height: 85vh;
     }
+
     .ai-message, .user-message, .chat-input {
         font-size: 14px;
     }
 }
-
