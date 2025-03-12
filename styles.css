@@ -1,103 +1,100 @@
-/* =============================== */
-/* GLOBAL STYLES */
-/* =============================== */
+/* General Styles */
 body {
     margin: 0;
     padding: 0;
     font-family: 'Montserrat', sans-serif;
     background-color: #292e34;
-    color: #ffffff;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-start;
+    height: 100vh;
+    overflow: hidden;
 }
 
-/* =============================== */
-/* HEADER & LOADER ANIMATION */
-/* =============================== */
+/* Header */
 .header-container {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: relative;
-    text-align: center;
-    margin-top: 30px;
-}
-
-.header-image {
-    max-width: 100%;
-    height: auto;
-}
-
-/* Loader Ring */
-.loader {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    background: transparent;
-    border: 5px solid transparent;
-    border-top: 5px solid #07f818;
-    animation: spin 1s linear infinite;
-}
-
-/* Spinning animation */
-@keyframes spin {
-    0% { transform: translate(-50%, -50%) rotate(0deg); }
-    100% { transform: translate(-50%, -50%) rotate(360deg); }
-}
-
-/* =============================== */
-/* CHAT STYLES */
-/* =============================== */
-.chat-container {
-    width: 90%;
-    max-width: 600px;
     margin-top: 20px;
 }
 
-.chat-box {
-    background: transparent;
-    padding: 15px;
-    min-height: 400px;
-    max-height: 500px;
-    overflow-y: auto;
+.header-container img {
+    max-width: 90%;
+    height: auto;
+    z-index: 2;
 }
 
-/* AI MESSAGE */
+/* Glow Animation */
+.glow-animation {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, #07f818, transparent);
+    filter: blur(30px);
+    animation: glowPulse 2s infinite alternate;
+    z-index: 1;
+}
+
+/* Chat Container */
+.chat-container {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    margin-top: 30px;
+    padding-bottom: 10px;
+}
+
+/* Chat Box */
+.chat-box {
+    flex-grow: 1;
+    overflow-y: auto;
+    max-height: 450px;
+    padding: 15px;
+    color: #ffffff;
+    display: flex;
+    flex-direction: column;
+}
+
+/* AI Message */
 .ai-message {
-    display: block;
     max-width: 75%;
-    padding: 10px 15px;
-    margin: 10px 0;
+    margin-bottom: 10px;
     color: #ffffff;
     font-size: 16px;
-    word-wrap: break-word;
-    align-self: flex-start;
+    white-space: pre-line;
 }
 
-/* USER MESSAGE */
+/* User Message */
 .user-message {
-    width: fit-content;
-    max-width: 75%;
-    padding: 12px 18px;
-    margin: 10px 0;
+    align-self: flex-end;
     background-color: #a5aeb5;
     color: #ffffff;
-    font-size: 16px;
+    padding: 12px 18px;
     border-radius: 15px;
+    max-width: 75%;
     word-wrap: break-word;
-    align-self: flex-end;
+    font-size: 16px;
 }
 
-/* Input Field */
+/* Chat Input */
 .chat-input {
-    width: calc(100% - 20px);
+    width: 90%;
     padding: 10px;
+    margin: 10px auto;
     border: none;
     border-radius: 5px;
     background: #3a414b;
     color: #ffffff;
     font-size: 16px;
+}
+
+/* Glow Animation Keyframes */
+@keyframes glowPulse {
+    0% { opacity: 0.7; }
+    100% { opacity: 1; }
 }
