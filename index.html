@@ -9,77 +9,25 @@
 </head>
 <body>
 
-    <!-- Header with Static Image -->
-    <div class="header-container">
-        <img id="header-image" src="https://i.postimg.cc/sx3FCbdz/gregbutainewdesktoptuesday.png" alt="Greg, But AI Header">
+    <!-- Responsive Header -->
+    <div class="header-container header-expanded">
+        <img id="header-image" src="https://i.postimg.cc/xT7SyChm/GBAI-Header-Desktop.png" alt="Greg, But AI Header">
     </div>
+
+    <!-- Green Line Loader -->
+    <div class="loader"></div>
 
     <!-- Chat Container -->
     <div class="chat-container">
-        <div class="chat-box" id="chat-box"></div>
-        <input type="text" class="chat-input" id="chat-input" placeholder="Type a message...">
+        <div id="chat-box" class="chat-box" aria-live="polite">
+            <div class="ai-message"><strong>Greg, But AI:</strong> What's good, youngblood? You need headlines? Big ideas? Or are we just gonna sit here swapping crazy conspiracy theories about why no one's ever seen baby pigeons? Either way, I gotchu.</div>
+        </div>
+        <div class="input-container">
+            <input type="text" class="chat-input" id="chat-input" placeholder="Type a message...">
+            <button id="send-button">Send</button>
+        </div>
     </div>
 
-    <script>
-        function updateHeaderImage() {
-            const headerImg = document.getElementById("header-image");
-            if (window.innerWidth <= 768) {
-                headerImg.src = "https://i.postimg.cc/sf7CgmvZ/Gregbut-AI-Tuesday-mobile.png";
-            } else {
-                headerImg.src = "https://i.postimg.cc/sx3FCbdz/gregbutainewdesktoptuesday.png";
-            }
-        }
-
-        window.onload = function () {
-            updateHeaderImage();
-            let chatBox = document.getElementById("chat-box");
-            chatBox.innerHTML += `<div class="ai-message"><strong>Greg, But AI:</strong> What's good, youngblood? You need headlines? Big ideas? Or are we just gonna sit here swapping crazy conspiracy theories about why no one's ever seen baby pigeons? Either way, I gotchu.</div>`;
-        };
-
-        window.onresize = updateHeaderImage;
-
-        document.getElementById("chat-input").addEventListener("keypress", function(event) {
-            if (event.key === "Enter" && this.value.trim() !== "") {
-                let userMessage = this.value.trim();
-                let chatBox = document.getElementById("chat-box");
-
-                let userBubble = document.createElement("div");
-                userBubble.classList.add("user-message");
-                userBubble.textContent = userMessage;
-                chatBox.appendChild(userBubble);
-                this.value = "";
-                chatBox.scrollTop = chatBox.scrollHeight;
-
-                let loader = document.createElement("div");
-                loader.classList.add("loader");
-                loader.innerHTML = `<img src="https://i.postimg.cc/8kxpcspj/Greg-Talking.png" alt="Thinking...">`;
-                chatBox.appendChild(loader);
-
-                fetch("/api/chat", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ userMessage: userMessage }),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    chatBox.removeChild(loader);
-                    let aiResponse = data.aiResponse || "Hmm, something went wrong. Operator error? That means you.";
-                    let aiMessage = document.createElement("div");
-                    aiMessage.classList.add("ai-message");
-                    aiMessage.innerHTML = `<strong>Greg, But AI:</strong> ` + aiResponse;
-                    chatBox.appendChild(aiMessage);
-                    chatBox.scrollTop = chatBox.scrollHeight;
-                })
-                .catch(error => {
-                    console.error("Error:", error);
-                    chatBox.removeChild(loader);
-                    let aiMessage = document.createElement("div");
-                    aiMessage.classList.add("ai-message");
-                    aiMessage.innerHTML = `<strong>Greg, But AI:</strong> Ahhh HORSESHIT! I done messed up. Let me know and I will fix it.`;
-                    chatBox.appendChild(aiMessage);
-                });
-            }
-        });
-    </script>
+<script src="chat.js"></script>
 </body>
 </html>
