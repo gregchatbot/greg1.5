@@ -6,21 +6,117 @@
     <title>Greg, But AI 1.5</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
+    <style>
+        /* General Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background-color: #292e34;
+            font-family: 'Montserrat', sans-serif;
+            height: 100vh;
+        }
+
+        /* Header Container */
+        .header-container {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .neomorphic-header {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            border-radius: 20px;
+            background: #292e34;
+            box-shadow: inset 10px 10px 15px #21262b, inset -10px -10px 15px #313840;
+        }
+
+        .glow-loader {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(7,248,24,0.8) 0%, rgba(41,46,52,0) 70%);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+            50% {
+                transform: scale(1.2);
+                opacity: 0.4;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 0.8;
+            }
+        }
+
+        #header-image {
+            position: relative;
+            z-index: 2;
+            max-width: 180px;
+        }
+
+        h1, p {
+            color: #FFFFFF;
+            line-height: 1.25;
+        }
+
+        /* Chat Container */
+        .chat-container {
+            width: 90%;
+            max-width: 600px;
+            margin-top: 20px;
+        }
+
+        .chat-box {
+            height: 400px;
+            overflow-y: auto;
+            padding: 15px;
+            color: #FFFFFF;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .chat-input {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: #313840;
+            color: #FFFFFF;
+            font-size: 16px;
+        }
+
+    </style>
 </head>
 <body>
-    <!-- Neomorphic Header with Loader -->
+    <!-- HEADER SECTION -->
     <div class="header-container">
         <div class="neomorphic-header">
-            <div class="loader">
-                <span></span>
-            </div>
-            <img src="https://i.postimg.cc/5yL2gSBz/Greg-Neo-Glow-MIDDLE.png" alt="Greg's Face" class="profile-image">
+            <!-- Glowing Loader Behind Profile Image -->
+            <div class="glow-loader"></div>
+            <!-- Profile Image with Cutout Ring -->
+            <img id="header-image" src="https://i.postimg.cc/8PqSpYbW/greg-but-ai-15-header-image-desktop.png" alt="Greg, But AI Header">
         </div>
         <h1>Greg, But AI</h1>
-        <p class="tagline">Copywritin’ | Brainstormin’ | Chitchattin’</p>
+        <p>Copywritin’ | Brainstormin’ | Chitchattin’</p>
     </div>
 
-    <!-- Chat Container -->
+    <!-- CHAT CONTAINER -->
     <div class="chat-container">
         <div class="chat-box" id="chat-box"></div>
         <input type="text" class="chat-input" id="chat-input" placeholder="Type a message...">
