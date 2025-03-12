@@ -1,41 +1,65 @@
 document.addEventListener("DOMContentLoaded", function () {
-    let chatBox = document.getElementById("chat-box");
-    let chatInput = document.getElementById("chat-input");
-    
-    // Initial Greeting
-    chatBox.innerHTML += `<div class='ai-message'><strong>Greg, But AI:</strong> What's good, youngblood? Need ideas, headlines, or just wanna swap conspiracy theories about baby pigeons? Either way, I gotchu.</div>`;
+    const chatBox = document.getElementById("chat-box");
+    const chatInput = document.getElementById("chat-input");
+    const loader = document.getElementById("loader"); // The new loader animation
 
+    // Add Greg's Opening Message
+    function addBotMessage(message) {
+        let botMessage = document.createElement("div");
+        botMessage.classList.add("ai-message");
+        botMessage.innerHTML = `<strong>Greg, But AI:</strong> ${message}`;
+        chatBox.appendChild(botMessage);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // Show Initial Bot Message
+    addBotMessage("What's good, youngblood? You need headlines? Big ideas? Or are we just going to sit here swapping conspiracy theories about why no one's ever seen baby pigeons? Either way, I got you.");
+
+    // Add User Message Function
+    function addUserMessage(message) {
+        let userMessage = document.createElement("div");
+        userMessage.classList.add("user-message");
+        userMessage.textContent = message;
+        chatBox.appendChild(userMessage);
+        chatBox.scrollTop = chatBox.scrollHeight;
+    }
+
+    // Handle User Input
     chatInput.addEventListener("keypress", function (event) {
         if (event.key === "Enter" && chatInput.value.trim() !== "") {
             let userMessage = chatInput.value.trim();
-            chatBox.innerHTML += `<div class='user-message'>${userMessage}</div>`;
             chatInput.value = "";
-            chatBox.scrollTop = chatBox.scrollHeight;
 
-            // Show loader while processing response
-            let loader = document.createElement("div");
-            loader.classList.add("ai-message");
-            loader.innerHTML = "Thinking...";
-            chatBox.appendChild(loader);
-            chatBox.scrollTop = chatBox.scrollHeight;
+            addUserMessage(userMessage);
+            showLoader();
 
-            fetch('/api/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+            // Fetch AI Response
+            fetch("/api/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ userMessage: userMessage })
             })
             .then(response => response.json())
             .then(data => {
-                loader.remove(); // Remove loader once response is ready
-                let aiResponse = data.aiResponse || "Error: Brain lag. Try again!";
-                chatBox.innerHTML += `<div class='ai-message'><strong>Greg, But AI:</strong> ${aiResponse}</div>`;
-                chatBox.scrollTop = chatBox.scrollHeight;
+                hideLoader();
+                let aiResponse = data.aiResponse || "Something went wrong. Try again.";
+                addBotMessage(aiResponse);
             })
             .catch(error => {
                 console.error("Error:", error);
-                loader.remove();
-                chatBox.innerHTML += `<div class='ai-message'><strong>Greg, But AI:</strong> Ahhh HORSESHIT! I done messed up. Let me know and I will fix it.</div>`;
+                hideLoader();
+                addBotMessage("There was an error processing your request. Let me know and I will fix it.");
             });
         }
     });
+
+    // Show Loader Animation
+    function showLoader() {
+        loader.style.display = "block";
+    }
+
+    // Hide Loader Animation
+    function hideLoader() {
+        loader.style.display = "none";
+    }
 });
