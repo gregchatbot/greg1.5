@@ -6,6 +6,7 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    height: 100vh;
     background-color: #2e333a;
     font-family: 'Montserrat', sans-serif;
 }
@@ -18,10 +19,10 @@ body {
 
 /* Chat Container */
 .chat-container {
-    width: 80%;
+    width: 90%;
     max-width: 600px;
     height: 500px;
-    border-radius: 30px;
+    border-radius: 15px;
     background: #2e333a;
     padding: 20px;
     display: flex;
@@ -30,6 +31,8 @@ body {
     overflow: hidden;
     position: relative;
     margin-top: 20px;
+    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 50px -12px inset, 
+                rgba(0, 0, 0, 0.3) 0px 18px 26px -18px inset;
 }
 
 /* Chat Box */
@@ -52,6 +55,9 @@ body {
     color: #ffffff;
     font-size: 16px;
     border-radius: 15px;
+    box-shadow: 6px 6px 12px #24282d, -6px -6px 12px #3a414b;
+    border: 1.5px solid #a5aeb5;
+    word-wrap: break-word;
     align-self: flex-end;
 }
 
