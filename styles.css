@@ -2,90 +2,137 @@
 body {
     margin: 0;
     padding: 0;
-    font-family: 'Montserrat', sans-serif;
-    background-color: #292e34;
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     height: 100vh;
-    overflow: hidden;
+    background-color: #292e34;
+    font-family: 'Montserrat', sans-serif;
 }
 
-/* Header */
+/* Header Container */
 .header-container {
+    position: relative;
     width: 100%;
+    max-width: 600px;
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
     margin-top: 20px;
 }
 
+/* Header Image */
 .header-container img {
-    max-width: 90%;
+    width: 100%;
+    max-width: 600px;
     height: auto;
-    z-index: 2;
 }
 
 /* Glow Animation */
 .glow-animation {
     position: absolute;
-    width: 200px;
-    height: 200px;
-    background: radial-gradient(circle, #07f818, transparent);
-    filter: blur(30px);
-    animation: glowPulse 2s infinite alternate;
-    z-index: 1;
+    width: 250px;
+    height: 250px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(7, 248, 24, 0.5) 0%, rgba(0, 0, 0, 0) 70%);
+    animation: pulseGlow 2s infinite alternate;
+}
+
+@keyframes pulseGlow {
+    0% {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+    100% {
+        transform: scale(1.2);
+        opacity: 1;
+    }
 }
 
 /* Chat Container */
 .chat-container {
-    width: 100%;
+    width: 90%;
     max-width: 600px;
+    height: 500px;
+    border-radius: 30px;
+    background: #2e333a;
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    margin-top: 30px;
-    padding-bottom: 10px;
+    justify-content: space-between;
+    overflow: hidden;
+    position: relative;
+    margin-top: 20px;
 }
 
 /* Chat Box */
 .chat-box {
     flex-grow: 1;
     overflow-y: auto;
-    max-height: 450px;
-    padding: 15px;
+    padding: 10px;
     color: #ffffff;
     display: flex;
     flex-direction: column;
 }
 
-/* AI Message */
-.ai-message {
-    max-width: 75%;
-    margin-bottom: 10px;
-    color: #ffffff;
-    font-size: 16px;
-    white-space: pre-line;
-}
-
-/* User Message */
+/* User Message Bubble - Right Justified */
 .user-message {
-    align-self: flex-end;
+    width: fit-content;
+    max-width: 75%;
+    padding: 12px 18px;
+    margin: 12px 0;
     background-color: #a5aeb5;
     color: #ffffff;
-    padding: 12px 18px;
-    border-radius: 15px;
-    max-width: 75%;
-    word-wrap: break-word;
     font-size: 16px;
+    border-radius: 15px;
+    box-shadow: 6px 6px 12px #24282d, -6px -6px 12px #3a414b;
+    border: 1.5px solid #a5aeb5;
+    word-wrap: break-word;
+    animation: bloop 0.3s ease-out;
+    align-self: flex-end;
 }
 
-/* Chat Input */
+/* AI Response (Left Justified) */
+.ai-message {
+    width: 100%;
+    max-width: 100%;
+    padding: 10px 0;
+    margin: 12px 0;
+    color: #ffffff;
+    font-size: 16px;
+    display: block;
+    word-wrap: break-word;
+    align-self: flex-start;
+}
+
+/* Loader (Greg's Face Thinking Animation) */
+.loader {
+    width: 50px;
+    height: 50px;
+    position: relative;
+    margin-top: 10px;
+    align-self: flex-start;
+}
+
+.loader img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    animation: pulse 1.2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); opacity: 0.7; }
+    50% { transform: scale(1.2); opacity: 1; }
+    100% { transform: scale(1); opacity: 0.7; }
+}
+
+/* Input Field */
 .chat-input {
-    width: 90%;
+    width: calc(100% - 20px);
     padding: 10px;
-    margin: 10px auto;
+    margin-top: 10px;
     border: none;
     border-radius: 5px;
     background: #3a414b;
@@ -93,8 +140,14 @@ body {
     font-size: 16px;
 }
 
-/* Glow Animation Keyframes */
-@keyframes glowPulse {
-    0% { opacity: 0.7; }
-    100% { opacity: 1; }
+/* Animation for User Message */
+@keyframes bloop {
+    0% {
+        transform: scale(0.8);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
 }
