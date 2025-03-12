@@ -1,64 +1,37 @@
-document.addEventListener("DOMContentLoaded", function () {
-    function updateHeaderImage() {
-        const headerImg = document.getElementById("header-image");
-        if (window.innerWidth <= 768) {
-            headerImg.src = "https://i.postimg.cc/sf7CgmvZ/Gregbut-AI-Tuesday-mobile.png";
-        } else {
-            headerImg.src = "https://i.postimg.cc/L5zcQ9rV/Gregbut-AI-tuesday-desktop.png";
-        }
+export default async function handler(req, res) {
+    if (req.method !== "POST") {
+        return res.status(405).json({ error: "Method Not Allowed" });
     }
 
-    updateHeaderImage();
-    window.onresize = updateHeaderImage;
+    const { userMessage } = req.body;
+    const apiKey = process.env.API_KEY;
 
-    let chatBox = document.getElementById("chat-box");
-    chatBox.innerHTML += `<div class="ai-message"><strong>Greg, But AI:</strong> What's good, youngblood? You need headlines? Big ideas? Or are we just gonna sit here swapping crazy conspiracy theories about why no one's ever seen baby pigeons? Either way, I gotchu.</div>`;
-
-    document.getElementById("chat-input").addEventListener("keypress", function (event) {
-        if (event.key === "Enter" && this.value.trim() !== "") {
-            let userMessage = this.value.trim();
-
-            // Create user message bubble
-            let userBubble = document.createElement("div");
-            userBubble.classList.add("user-message");
-            userBubble.textContent = userMessage;
-            chatBox.appendChild(userBubble);
-            this.value = "";
-            chatBox.scrollTop = chatBox.scrollHeight;
-
-            // Create and append the loading animation
-            let loader = document.createElement("div");
-            loader.classList.add("loader");
-            loader.innerHTML = `<img src="https://i.postimg.cc/8kxpcspj/Greg-Talking.png" alt="Thinking...">`;
-            chatBox.appendChild(loader);
-
-            // Fetch AI response from backend
-            fetch("/api/chat", {
-                method: "POST",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ userMessage: userMessage }),
+    try {
+        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+                model: "gpt-4-turbo", // Ensure this matches your Greg, But AI GPT deployment model
+                messages: [
+                    { "role": "system", "content": "You are Greg, But AI, an advanced chatbot version of Greg Lewerer. Your responses should match the unique personality and tone of Greg, focusing on wit, humor, and strategic insight. Keep it engaging, concise, and conversational." },
+                    { "role": "user", "content": userMessage }
+                ]
             })
-                .then((response) => response.json())
-                .then((data) => {
-                    chatBox.removeChild(loader);
-                    let aiResponse = data.aiResponse || "Hmm, something went wrong. Operator error? That means you.";
+        });
 
-                    let aiMessage = document.createElement("div");
-                    aiMessage.classList.add("ai-message");
-                    aiMessage.innerHTML = `<strong>Greg, But AI:</strong> ` + aiResponse;
-                    chatBox.appendChild(aiMessage);
+        const data = await response.json();
 
-                    chatBox.scrollTop = chatBox.scrollHeight;
-                })
-                .catch((error) => {
-                    console.error("Error:", error);
-                    chatBox.removeChild(loader);
-
-                    let errorMessage = document.createElement("div");
-                    errorMessage.classList.add("ai-message");
-                    errorMessage.innerHTML = `<strong>Greg, But AI:</strong> Ahhh HORSESHIT! I done messed up. Let me know and I will fix it.`;
-                    chatBox.appendChild(errorMessage);
-                });
+        if (!response.ok) {
+            throw new Error(data.error?.message || "Unknown error from OpenAI");
         }
-    });
-});
+
+        res.status(200).json({ aiResponse: data.choices[0].message.content.replace(/\n/g, '<br>') });
+
+    } catch (error) {
+        console.error("OpenAI API Error:", error);
+        res.status(500).json({ aiResponse: "Ahhh HORSESHIT! I done messed up. Let me know and I will fix it." });
+    }
+}
