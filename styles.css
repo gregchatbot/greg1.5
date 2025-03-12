@@ -1,4 +1,4 @@
-/* General Page Styles */
+/* General Styles */
 body {
     margin: 0;
     padding: 0;
@@ -6,17 +6,11 @@ body {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background-color: #292e34;
+    background-color: #2e333a;
     font-family: 'Montserrat', sans-serif;
 }
 
-/* Header Styling */
-.header-container {
-    width: 100%;
-    text-align: center;
-    margin-top: 20px;
-}
-
+/* Header Image */
 .header-container img {
     max-width: 100%;
     height: auto;
@@ -24,10 +18,10 @@ body {
 
 /* Chat Container */
 .chat-container {
-    width: 90%;
+    width: 80%;
     max-width: 600px;
     height: 500px;
-    border-radius: 20px;
+    border-radius: 30px;
     background: #2e333a;
     padding: 20px;
     display: flex;
@@ -48,7 +42,7 @@ body {
     flex-direction: column;
 }
 
-/* User Message Bubble - Right Justified */
+/* User Message Bubble */
 .user-message {
     width: fit-content;
     max-width: 75%;
@@ -58,16 +52,13 @@ body {
     color: #ffffff;
     font-size: 16px;
     border-radius: 15px;
-    box-shadow: 6px 6px 12px #24282d, -6px -6px 12px #3a414b;
-    border: 1.5px solid #a5aeb5;
-    word-wrap: break-word;
     align-self: flex-end;
 }
 
-/* AI Response - Left Justified */
+/* AI Response */
 .ai-message {
     width: 100%;
-    max-width: 100%;
+    max-width: 75%;
     padding: 10px 0;
     margin: 12px 0;
     color: #ffffff;
@@ -77,7 +68,7 @@ body {
     align-self: flex-start;
 }
 
-/* Loading Animation - Greg’s Face */
+/* Loader (Greg's Face Thinking Animation) */
 .loader {
     width: 50px;
     height: 50px;
@@ -102,17 +93,11 @@ body {
 /* Input Field */
 .chat-input {
     width: calc(100% - 20px);
-    padding: 12px;
+    padding: 10px;
     margin-top: 10px;
     border: none;
     border-radius: 5px;
     background: #3a414b;
     color: #ffffff;
     font-size: 16px;
-    outline: none;
-}
-
-/* Placeholder Text Color */
-.chat-input::placeholder {
-    color: #a5aeb5;
 }
