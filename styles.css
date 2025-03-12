@@ -17,7 +17,7 @@ body {
     height: auto;
 }
 
-/* Chat Container */
+/* Chat Container (FLAT, NO NEOMORPHISM) */
 .chat-container {
     width: 90%;
     max-width: 600px;
@@ -31,8 +31,6 @@ body {
     overflow: hidden;
     position: relative;
     margin-top: 20px;
-    box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 50px -12px inset, 
-                rgba(0, 0, 0, 0.3) 0px 18px 26px -18px inset;
 }
 
 /* Chat Box */
