@@ -4,35 +4,43 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Greg, But AI</title>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-
-    <!-- Responsive Header -->
-    <div class="header-container header-expanded">
-        <img id="header-image" src="https://i.postimg.cc/xT7SyChm/GBAI-Header-Desktop.png" alt="Greg, But AI Header">
-    </div>
-
-    <!-- Green Line Loader -->
-    <div class="loader"></div>
+    <!-- Header Section -->
+    <header>
+        <picture>
+            <!-- Mobile Header -->
+            <source media="(max-width: 768px)" srcset="https://i.postimg.cc/nrQqSxq0/GBAI-Fresh-Mobile.png">
+            <!-- Desktop Header -->
+            <img src="https://i.postimg.cc/bdckK5T8/Greg-But-AI-Fresh-Desktopheader.png" alt="Greg, But AI Header">
+        </picture>
+    </header>
 
     <!-- Chat Container -->
-    <div class="chat-container">
-    <div id="chat-box" class="chat-box" aria-live="polite">
-        <div class="ai-message">
-          <strong>Greg, But AI:</strong> 
-          Sheeeee-it, ‘bout time someone showed up. Praise be I left my chats on.<br><br>
-          Alright, whatchu you wanna get after today?<br><br>
-          Copywriting? Brainstorming? Talk behind the real Greg’s back?
+    <main>
+        <div id="chatbox">
+            <div class="message bot">
+                <p>Well, look who finally decided to show. Good thing I left my chats on, or this would be a painfully awkward staring contest.</p>
+                <p>Anyway, welcome to the Thunderdome. A place where ideas fly, egos die, and AI-generated wisdom flows like… well, something really, really flowy.</p>
+                <p>I’ll be your Greg Lewerer stand-in. Artificially intelligent, but still crazy AF.</p>
+                <p>So, what’s the game plan?</p>
+                <ul>
+                    <li>→ Copywriting sorcery</li>
+                    <li>→ Brainstorming brilliance</li>
+                    <li>→ A Q&A about the real Greg</li>
+                </ul>
+                <p>Dealer’s choice. Hit me.</p>
+            </div>
         </div>
-    </div>
-    <div class="input-container">
-        <input type="text" class="chat-input" id="chat-input" placeholder="Type a message...">
-        <button id="send-button">Send</button>
-    </div>
-</div>
 
-<script src="chat.js"></script>
+        <!-- Chat Input -->
+        <div id="input-container">
+            <input type="text" id="user-input" placeholder="Type your message here...">
+            <button id="send-btn">Send</button>
+        </div>
+    </main>
+
+    <script src="chat.js"></script>
 </body>
 </html>
