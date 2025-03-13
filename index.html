@@ -42,5 +42,40 @@
     </main>
 
     <script src="chat.js"></script>
+    <script>
+        document.getElementById("send-btn").addEventListener("click", async function() {
+            const userInput = document.getElementById("user-input").value;
+            if (!userInput.trim()) return;
+
+            const chatbox = document.getElementById("chatbox");
+            const userMessage = document.createElement("div");
+            userMessage.classList.add("message", "user");
+            userMessage.innerHTML = `<p>${userInput}</p>`;
+            chatbox.appendChild(userMessage);
+            document.getElementById("user-input").value = "";
+
+            try {
+                const response = await fetch("/api/chat", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({ userMessage })
+                });
+
+                const data = await response.json();
+                const botMessage = document.createElement("div");
+                botMessage.classList.add("message", "bot");
+                botMessage.innerHTML = `<p>${data.aiResponse.replace(/\n/g, '<br>')}</p>`;
+                chatbox.appendChild(botMessage);
+            } catch (error) {
+                console.error("Chatbot Error:", error);
+                const errorMessage = document.createElement("div");
+                errorMessage.classList.add("message", "bot");
+                errorMessage.innerHTML = `<p>Ahhh HORSESHIT! I done messed up. Let me know and I will fix it.</p>`;
+                chatbox.appendChild(errorMessage);
+            }
+        });
+    </script>
 </body>
 </html>
