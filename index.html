@@ -3,79 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Greg, But AI</title>
+    <title>AI Greg</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Header Section -->
-    <header>
-        <picture>
-            <!-- Mobile Header -->
-            <source media="(max-width: 768px)" srcset="https://i.postimg.cc/nrQqSxq0/GBAI-Fresh-Mobile.png">
-            <!-- Desktop Header -->
-            <img src="https://i.postimg.cc/bdckK5T8/Greg-But-AI-Fresh-Desktopheader.png" alt="Greg, But AI Header">
-        </picture>
-    </header>
 
-    <!-- Chat Container -->
-    <main>
-        <div id="chatbox">
-            <div class="message bot">
-                <p>Well, look who finally decided to show. Good thing I left my chats on, or this would be a painfully awkward staring contest.</p>
-                <p>Anyway, welcome to the Thunderdome. A place where ideas fly, egos die, and AI-generated wisdom flows like… well, something really, really flowy.</p>
-                <p>I’ll be your Greg Lewerer stand-in. Artificially intelligent, but still crazy AF.</p>
-                <p>So, what’s the game plan?</p>
-                <ul>
-                    <li>→ Copywriting sorcery</li>
-                    <li>→ Brainstorming brilliance</li>
-                    <li>→ A Q&A about the real Greg</li>
-                </ul>
-                <p>Dealer’s choice. Hit me.</p>
-            </div>
-        </div>
+    <!-- Splash Page -->
+    <div id="splash-page" class="splash-container">
+        <img class="splash-image" src="https://i.postimg.cc/vHqYKt41/AI-GREG-DESKTOP-FF.png" alt="AI Greg Splash">
+        <div class="swipe-hint">⬆ Swipe up to start</div>
+    </div>
 
-        <!-- Chat Input -->
-        <div id="input-container">
-            <input type="text" id="user-input" placeholder="Type your message here...">
+    <!-- Chat Page -->
+    <div id="chat-page" class="chat-container">
+        <header class="chat-header">
+            <img class="header-image" src="https://i.postimg.cc/zBF5FCmG/AIGreg-Desktopheader-FF2.png" alt="AI Greg Header">
+        </header>
+        <div class="chat-messages"></div>
+        <div class="chat-input-container">
+            <input type="text" id="user-input" placeholder="Type your message..." autofocus>
             <button id="send-btn">Send</button>
         </div>
-    </main>
+    </div>
 
     <script src="chat.js"></script>
-    <script>
-        document.getElementById("send-btn").addEventListener("click", async function() {
-            const userInput = document.getElementById("user-input").value;
-            if (!userInput.trim()) return;
-
-            const chatbox = document.getElementById("chatbox");
-            const userMessage = document.createElement("div");
-            userMessage.classList.add("message", "user");
-            userMessage.innerHTML = `<p>${userInput}</p>`;
-            chatbox.appendChild(userMessage);
-            document.getElementById("user-input").value = "";
-
-            try {
-                const response = await fetch("/api/chat", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({ userMessage })
-                });
-
-                const data = await response.json();
-                const botMessage = document.createElement("div");
-                botMessage.classList.add("message", "bot");
-                botMessage.innerHTML = `<p>${data.aiResponse.replace(/\n/g, '<br>')}</p>`;
-                chatbox.appendChild(botMessage);
-            } catch (error) {
-                console.error("Chatbot Error:", error);
-                const errorMessage = document.createElement("div");
-                errorMessage.classList.add("message", "bot");
-                errorMessage.innerHTML = `<p>Ahhh HORSESHIT! I done messed up. Let me know and I will fix it.</p>`;
-                chatbox.appendChild(errorMessage);
-            }
-        });
-    </script>
 </body>
 </html>
