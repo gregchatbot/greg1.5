@@ -10,11 +10,14 @@ body {
     height: 100vh;
     background: url('https://i.postimg.cc/vBr8SRnM/AI-Greg-responsive-Background-Chat-FF.png') no-repeat center center;
     background-size: cover;
+    overflow: hidden;
 }
 
 /* Splash Page */
 .splash-container {
     position: fixed;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100vh;
     display: flex;
@@ -24,6 +27,7 @@ body {
     text-align: center;
     background: rgba(255, 255, 255, 0.15);
     backdrop-filter: blur(10px);
+    z-index: 100;
 }
 
 .splash-image {
@@ -33,24 +37,43 @@ body {
 
 .swipe-hint {
     font-size: 18px;
-    color: #fff;
+    color: #333;
     margin-top: 20px;
 }
 
-/* Chat Page */
+#mobile-hint {
+    display: none;
+}
+
+#desktop-hint {
+    display: block;
+}
+
+/* Mobile View Adjustments */
+@media (max-width: 768px) {
+    #mobile-hint {
+        display: block;
+    }
+    #desktop-hint {
+        display: none;
+    }
+}
+
+/* Chat Page (Initially Hidden) */
 .chat-container {
     display: none;
     width: 90%;
     max-width: 600px;
     height: 80vh;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(12px);
     border-radius: 12px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     padding: 20px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
+    z-index: 1;
 }
 
 .chat-header img {
