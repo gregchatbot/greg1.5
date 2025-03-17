@@ -13,7 +13,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (startY - endY > 50) {  
             splashPage.style.display = "none";
             chatPage.style.display = "flex";
-            addMessage("🔥 WELCOME TO THE THUNDERDOME. 🔥<br><br>Are we shaping history, shootin’ the shit, or flipping the switch to GreggyPro Mode for an official interview?<br><br>Your move, hotshot.", "bot");
+            addMessage("WELCOME TO THE THUNDERDOME!<br><br>Are we shaping history, shootin’ the shit, or flipping the switch to GreggyPro Mode for an official interview?<br><br>Your move, hotshot.", "bot");
         }
     });
 
@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function () {
     splashPage.addEventListener("click", function () {
         splashPage.style.display = "none";
         chatPage.style.display = "flex";
-        addMessage("🔥 WELCOME TO THE THUNDERDOME. 🔥<br><br>Are we shaping history, shootin’ the shit, or flipping the switch to GreggyPro Mode for an official interview?<br><br>Your move, hotshot.", "bot");
+        addMessage("WELCOME TO THE THUNDERDOME!<br><br>Are we shaping history, shootin’ the shit, or flipping the switch to GreggyPro Mode for an official interview?<br><br>Your move, hotshot.", "bot");
     });
 
     // Chatbot Functionality
