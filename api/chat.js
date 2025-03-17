@@ -1,33 +1,36 @@
 document.addEventListener("DOMContentLoaded", function () {
-    let startY;
-    const splashPage = document.getElementById("splash-page");
-    const chatPage = document.getElementById("chat-page");
+    const chatMessages = document.querySelector(".chat-messages");
+    const userInput = document.getElementById("user-input");
+    const sendBtn = document.getElementById("send-btn");
+    const loaderBox = document.getElementById("loader-box");
 
-    // Mobile Swipe Up Transition
-    document.addEventListener("touchstart", function (event) {
-        startY = event.touches[0].clientY;
+    // Show opening message instantly
+    addMessage("Hey you, it’s me…<br><br>AI Greg.<br><br>Stepping in for the real deal. Whatever you need, I gotchu.<br>→ Need some bitchin’ copy?<br>→ Brainstorm a big idea?<br>→ Just shoot the shit?<br>Or… are we flipping the switch to GreggyPro Mode for an official interview?<br><br>Your move, hotshot.", "bot");
+
+    // Send message on button click
+    sendBtn.addEventListener("click", sendMessage);
+    userInput.addEventListener("keypress", function(event) {
+        if (event.key === "Enter") sendMessage();
     });
 
-    document.addEventListener("touchend", function (event) {
-        let endY = event.changedTouches[0].clientY;
-        if (startY - endY > 50) {  
-            splashPage.style.display = "none";
-            chatPage.style.display = "flex";
-            addMessage("🔥 WELCOME TO THE THUNDERDOME. 🔥<br><br>Are we shaping history, shootin’ the shit, or flipping the switch to GreggyPro Mode for an official interview?<br><br>Your move, hotshot.", "bot");
-        }
-    });
+    function sendMessage() {
+        const userText = userInput.value.trim();
+        if (userText === "") return;
 
-    // Desktop Scroll Transition
-    window.addEventListener("scroll", function () {
-        if (window.scrollY > 50) {  
-            splashPage.style.display = "none";
-            chatPage.style.display = "flex";
-            addMessage("🔥 WELCOME TO THE THUNDERDOME. 🔥<br><br>Are we shaping history, shootin’ the shit, or flipping the switch to GreggyPro Mode for an official interview?<br><br>Your move, hotshot.", "bot");
-        }
-    });
+        addMessage(userText, "user");
+        userInput.value = "";
+
+        // Show loader
+        loaderBox.style.display = "block";
+
+        // Fake AI response delay (simulate API call)
+        setTimeout(function () {
+            loaderBox.style.display = "none";
+            addMessage("🔥 Processing that Greggy magic…<br>(In a real version, I’d be spitting facts right now.)", "bot");
+        }, 2000);
+    }
 
     function addMessage(text, sender) {
-        const chatMessages = document.querySelector(".chat-messages");
         const messageDiv = document.createElement("div");
         messageDiv.classList.add("chat-bubble", sender);
         messageDiv.innerHTML = text;
