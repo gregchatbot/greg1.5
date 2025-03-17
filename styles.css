@@ -25,14 +25,24 @@ body {
     align-items: center;
     justify-content: center;
     text-align: center;
-    background: rgba(255, 255, 255, 0.15);
-    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(8px);
     z-index: 100;
 }
 
+/* Show correct splash image based on device */
 .splash-image {
     width: 100%;
     max-width: 800px;
+    display: none;
+}
+
+.desktop {
+    display: block;
+}
+
+.mobile {
+    display: none;
 }
 
 .swipe-hint {
@@ -51,6 +61,12 @@ body {
 
 /* Mobile View Adjustments */
 @media (max-width: 768px) {
+    .desktop {
+        display: none;
+    }
+    .mobile {
+        display: block;
+    }
     #mobile-hint {
         display: block;
     }
