@@ -13,27 +13,18 @@ document.addEventListener("DOMContentLoaded", function () {
         if (startY - endY > 50) {  
             splashPage.style.display = "none";
             chatPage.style.display = "flex";
-            addMessage("WELCOME TO THE THUNDERDOME!<br><br>Are we shaping history, shootin’ the shit, or flipping the switch to GreggyPro Mode for an official interview?<br><br>Your move, hotshot.", "bot");
+            addMessage("🔥 WELCOME TO THE THUNDERDOME. 🔥<br><br>Are we shaping history, shootin’ the shit, or flipping the switch to GreggyPro Mode for an official interview?<br><br>Your move, hotshot.", "bot");
         }
     });
 
     // Desktop Scroll Transition
-    splashPage.addEventListener("click", function () {
-        splashPage.style.display = "none";
-        chatPage.style.display = "flex";
-        addMessage("WELCOME TO THE THUNDERDOME!<br><br>Are we shaping history, shootin’ the shit, or flipping the switch to GreggyPro Mode for an official interview?<br><br>Your move, hotshot.", "bot");
+    window.addEventListener("scroll", function () {
+        if (window.scrollY > 50) {  
+            splashPage.style.display = "none";
+            chatPage.style.display = "flex";
+            addMessage("🔥 WELCOME TO THE THUNDERDOME. 🔥<br><br>Are we shaping history, shootin’ the shit, or flipping the switch to GreggyPro Mode for an official interview?<br><br>Your move, hotshot.", "bot");
+        }
     });
-
-    // Chatbot Functionality
-    document.getElementById("send-btn").addEventListener("click", sendMessage);
-    
-    function sendMessage() {
-        const userInput = document.getElementById("user-input").value.trim();
-        if (userInput === "") return;
-
-        addMessage(userInput, "user");
-        document.getElementById("user-input").value = "";
-    }
 
     function addMessage(text, sender) {
         const chatMessages = document.querySelector(".chat-messages");
