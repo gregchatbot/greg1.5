@@ -11,7 +11,7 @@
             padding: 0;
             width: 100%;
             height: 100vh;
-            overflow: hidden;
+            overflow-y: auto;
             font-family: 'Montserrat', sans-serif;
             background: url('https://i.postimg.cc/k471FtPn/3tuesdaybackground.png') no-repeat center center/cover;
             display: flex;
@@ -22,29 +22,6 @@
         @media (max-width: 768px) {
             body {
                 background: url('https://i.postimg.cc/KjR5JPqy/Tuesday-Mobile-Back.png') no-repeat center center/cover;
-            }
-        }
-
-        .header-container {
-            width: 100%;
-            position: fixed;
-            top: 0;
-            left: 0;
-            text-align: center;
-            z-index: 1000;
-        }
-
-        .header-container img {
-            width: 100%;
-            max-width: 470px;
-            height: auto;
-            display: block;
-            margin: 10px auto;
-        }
-
-        @media (max-width: 768px) {
-            .header-container img {
-                max-width: 300px;
             }
         }
 
@@ -62,13 +39,7 @@
             justify-content: space-between;
             overflow: hidden;
             margin: 140px auto 0 auto;
-        }
-
-        @media (max-width: 768px) {
-            .chat-container {
-                margin: 160px auto 0 auto; /* Increased space on mobile */
-                height: 60vh;
-            }
+            position: relative;
         }
 
         .chat-box {
@@ -78,49 +49,6 @@
             color: #646774;
             display: flex;
             flex-direction: column;
-        }
-
-        .user-message {
-            max-width: 75%;
-            padding: 12px 18px;
-            margin: 10px 0;
-            background: rgba(255, 255, 255, 0.2);
-            color: #646774;
-            font-size: 16px;
-            border-radius: 15px;
-            backdrop-filter: blur(8px);
-            border: 1.5px solid rgba(255, 255, 255, 0.3);
-            word-wrap: break-word;
-            align-self: flex-end;
-        }
-
-        .ai-message {
-            max-width: 90%;
-            padding: 10px;
-            margin: 10px 0;
-            color: #646774;
-            font-size: 16px;
-            word-wrap: break-word;
-            align-self: flex-start;
-        }
-
-        .loader {
-            width: 30px;
-            height: 30px;
-            margin-top: 10px;
-            align-self: flex-start;
-        }
-
-        .loader img {
-            width: 30px;
-            height: 30px;
-            animation: pulse 1.2s infinite ease-in-out;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 0.7; }
-            50% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(1); opacity: 0.7; }
         }
 
         .input-container {
@@ -177,75 +105,80 @@
 
     <div class="chat-container">
         <div class="chat-box" id="chat-box"></div>
-        <div class="input-container">
+        <form id="chat-form" class="input-container">
             <input type="text" class="chat-input" id="chat-input" placeholder="Type a message...">
-            <button class="send-button" id="send-button">
+            <button type="submit" class="send-button">
                 <img src="https://i.postimg.cc/4dd4dPNt/4458496.png" alt="Send" class="send-icon">
             </button>
-        </div>
+        </form>
     </div>
 
     <script>
-    window.onload = function () {
-        let chatBox = document.getElementById('chat-box');
-        document.getElementById('chat-input').focus();
-        chatBox.innerHTML += `
-            <div class="ai-message">
-                <b>WELCOME TO THE THUNDERDOME!</b><br><br>
-                I’ll be your Greg Lewerer stand-in today. What kind of trouble are we getting into?<br><br>
-                Are we shaping history, shootin’ the shit, or flipping the switch to GreggyPro Mode for an official interview?<br><br>
-                Your move, hotshot.
-            </div>
-        `;
-    };
+        window.onload = function () {
+            let chatBox = document.getElementById('chat-box');
+            document.getElementById('chat-input').focus();
+            chatBox.innerHTML += `
+                <div class="ai-message">
+                    <b>WELCOME TO THE THUNDERDOME!</b><br><br>
+                    I’ll be your Greg Lewerer stand-in today. What kind of trouble are we getting into?<br><br>
+                    Are we shaping history, shootin’ the shit, or flipping the switch to GreggyPro Mode for an official interview?<br><br>
+                    Your move, hotshot.
+                </div>
+            `;
+        };
 
-    async function sendMessage(event) {
-        event.preventDefault();
+        async function sendMessage(event) {
+            event.preventDefault();
 
-        let chatInput = document.getElementById('chat-input');
-        let userMessage = chatInput.value.trim();
-        let chatBox = document.getElementById('chat-box');
+            let chatInput = document.getElementById('chat-input');
+            let userMessage = chatInput.value.trim();
+            let chatBox = document.getElementById('chat-box');
 
-        if (userMessage === '') return;
+            if (userMessage === '') return;
 
-        let userBubble = document.createElement('div');
-        userBubble.classList.add('user-message');
-        userBubble.textContent = userMessage;
-        chatBox.appendChild(userBubble);
-        chatInput.value = '';
-        chatBox.scrollTop = chatBox.scrollHeight;
-
-        let loader = document.createElement('div');
-        loader.classList.add('loader');
-        loader.innerHTML = `<img src="https://i.postimg.cc/8Pz7CN73/Greg-Fresh-Smoke.png" alt="Thinking...">`;
-        chatBox.appendChild(loader);
-
-        try {
-            let response = await fetch('/api/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userMessage })
-            });
-
-            let data = await response.json();
-            chatBox.removeChild(loader);
-
-            let aiMessage = document.createElement('div');
-            aiMessage.classList.add('ai-message');
-            aiMessage.innerHTML = `<strong>AI Greg:</strong> <br>` + (data.aiResponse || "I didn't catch that. Try again.");
-            chatBox.appendChild(aiMessage);
+            let userBubble = document.createElement('div');
+            userBubble.classList.add('user-message');
+            userBubble.textContent = userMessage;
+            chatBox.appendChild(userBubble);
+            chatInput.value = '';
+            chatInput.focus();
             chatBox.scrollTop = chatBox.scrollHeight;
 
-        } catch (error) {
-            chatBox.removeChild(loader);
-            chatBox.innerHTML += `<div class="ai-message"><strong>AI Greg:</strong> Sorry, something went wrong. Try again.</div>`;
-        }
-    }
+            let loader = document.createElement('div');
+            loader.classList.add('loader');
+            loader.innerHTML = `<img src="https://i.postimg.cc/8Pz7CN73/Greg-Fresh-Smoke.png" alt="Thinking...">`;
+            chatBox.appendChild(loader);
 
-    document.getElementById('send-button').addEventListener('click', sendMessage);
-    document.getElementById('chat-input').addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') sendMessage(event);
-    });
+            try {
+                let response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userMessage })
+                });
+
+                let data = await response.json();
+                chatBox.removeChild(loader);
+
+                let aiMessage = document.createElement('div');
+                aiMessage.classList.add('ai-message');
+                aiMessage.innerHTML = `<strong>AI Greg:</strong> <br>` + (data.aiResponse || "I didn't catch that. Try again.");
+                chatBox.appendChild(aiMessage);
+                chatBox.scrollTop = chatBox.scrollHeight;
+
+            } catch (error) {
+                console.error("Fetch error:", error);
+                chatBox.removeChild(loader);
+                chatBox.innerHTML += `<div class="ai-message"><strong>AI Greg:</strong> Oops, something went wrong. Check your internet and try again.</div>`;
+            }
+        }
+
+        document.getElementById('chat-form').addEventListener('submit', sendMessage);
+        document.getElementById('chat-input').addEventListener('keydown', (event) => {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendMessage(event);
+            }
+        });
     </script>
 </body>
 </html>
