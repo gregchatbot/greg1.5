@@ -4,7 +4,8 @@ export default async function handler(req, res) {
     }
 
     const { userMessage } = req.body;
-    const apiKey = process.env.API_KEY;
+    const apiKey = process.env.OPENAI_API_KEY;
+    const assistantId = process.env.OPENAI_ASSISTANT_ID;  // If using Assistants API
 
     try {
         const response = await fetch("https://api.openai.com/v1/chat/completions", {
@@ -28,10 +29,15 @@ export default async function handler(req, res) {
             throw new Error(data.error?.message || "Unknown error from OpenAI");
         }
 
-        res.status(200).json({ aiResponse: data.choices[0].message.content.replace(/\n/g, '<br>') });
+        res.status(200).json({ aiResponse: formatResponse(data.choices[0].message.content) });
 
     } catch (error) {
         console.error("OpenAI API Error:", error);
         res.status(500).json({ aiResponse: "Ahhh HORSESHIT! I done messed up. Let me know and I will fix it." });
     }
+}
+
+// Format AI response with spacing after every two sentences
+function formatResponse(response) {
+    return response.replace(/(\.|\?|!)(\s[A-Z])/g, '$1<br><br>$2');
 }
