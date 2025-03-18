@@ -17,6 +17,10 @@
             line-height: 1.25;
             background: url('https://i.postimg.cc/k471FtPn/3tuesdaybackground.png') no-repeat center center/cover;
             transition: background 0.5s ease-in-out;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         /* Mobile Background */
@@ -70,6 +74,14 @@
             margin: 160px auto 0 auto;
             left: 0;
             right: 0;
+        }
+
+        /* Mobile-specific chat container adjustments */
+        @media (max-width: 768px) {
+            .chat-container {
+                margin: 100px auto 0 auto; /* Less margin for mobile */
+                height: 70vh; /* Adjust height for better fit */
+            }
         }
 
         /* Chat Box */
@@ -138,7 +150,13 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-top: 10px;
+            padding: 10px;
+            position: sticky;
+            bottom: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(8px);
+            border-radius: 20px;
         }
 
         .chat-input {
