@@ -54,7 +54,7 @@
         .chat-container {
             width: 80%;
             max-width: 600px;
-            height: 500px;
+            height: 65vh;
             border-radius: 30px;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(20px);
@@ -66,7 +66,7 @@
             justify-content: space-between;
             overflow: hidden;
             position: relative;
-            margin: 120px auto 0 auto;
+            margin: 100px auto 0 auto;
             left: 0;
             right: 0;
         }
@@ -74,7 +74,7 @@
         @media (max-width: 768px) {
             .chat-container {
                 margin: 80px auto 0 auto;
-                height: 75vh;
+                height: 60vh;
             }
         }
 
@@ -142,9 +142,12 @@
             align-items: center;
             justify-content: center;
             padding: 10px;
-            position: sticky;
+            position: fixed;
             bottom: 0;
-            width: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 600px;
             background: rgba(255, 255, 255, 0.6);
             backdrop-filter: blur(15px);
             border-radius: 20px;
@@ -214,45 +217,10 @@
         `;
     };
 
-    function sendMessage() {
-        let chatInput = document.getElementById('chat-input');
-        let userMessage = chatInput.value.trim();
-        let chatBox = document.getElementById('chat-box');
-
-        if (userMessage === '') return;
-
-        let userBubble = document.createElement('div');
-        userBubble.classList.add('user-message');
-        userBubble.textContent = userMessage;
-        chatBox.appendChild(userBubble);
-        chatInput.value = '';
-        chatBox.scrollTop = chatBox.scrollHeight;
-
-        let loader = document.createElement('div');
-        loader.classList.add('loader');
-        loader.innerHTML = `<img src="https://i.postimg.cc/8Pz7CN73/Greg-Fresh-Smoke.png" alt="Thinking...">`;
-        chatBox.appendChild(loader);
-
-        fetch('/api/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userMessage })
-        })
-        .then(response => response.json())
-        .then(data => {
-            chatBox.removeChild(loader);
-            let aiMessage = document.createElement('div');
-            aiMessage.classList.add('ai-message');
-            aiMessage.innerHTML = `<strong>AI Greg:</strong> <br>` + data.aiResponse.replace(/\n/g, '<br><br>');
-            chatBox.appendChild(aiMessage);
-            chatBox.scrollTop = chatBox.scrollHeight;
-        });
-    }
-
     document.getElementById('send-button').addEventListener('click', sendMessage);
     document.getElementById('chat-input').addEventListener('keypress', (event) => {
         if (event.key === 'Enter') sendMessage();
     });
-</script>
+    </script>
 </body>
 </html>
