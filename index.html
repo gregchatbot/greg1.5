@@ -15,7 +15,7 @@
             align-items: center;
             justify-content: center;
             height: 100vh;
-            background-color: #2e333a;
+            background: url('https://i.postimg.cc/vBr8SRnM/AI-Greg-responsive-Background-Chat-FF.png') no-repeat center center/cover;
             font-family: 'Montserrat', sans-serif;
             line-height: 1.25;
         }
@@ -26,15 +26,16 @@
             height: auto;
         }
 
-        /* Chat Container */
+        /* Glassmorphism Chat Container */
         .chat-container {
             width: 80%;
             max-width: 600px;
             height: 500px;
             border-radius: 30px;
-            background: #2e333a;
-            box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 50px -12px inset, 
-                        rgba(0, 0, 0, 0.3) 0px 18px 26px -18px inset;
+            background: rgba(255, 255, 255, 0.1); /* Transparent White */
+            backdrop-filter: blur(12px); /* Blur Effect */
+            -webkit-backdrop-filter: blur(12px); /* Safari Support */
+            border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle Border */
             padding: 20px;
             display: flex;
             flex-direction: column;
@@ -60,12 +61,12 @@
             max-width: 75%;
             padding: 12px 18px;
             margin: 12px 0;
-            background-color: #a5aeb5;
+            background: rgba(255, 255, 255, 0.2);
             color: #ffffff;
             font-size: 16px;
             border-radius: 15px;
-            box-shadow: 6px 6px 12px #24282d, -6px -6px 12px #3a414b;
-            border: 1.5px solid #a5aeb5;
+            backdrop-filter: blur(8px);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
             word-wrap: break-word;
             align-self: flex-end;
         }
