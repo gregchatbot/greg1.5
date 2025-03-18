@@ -1,40 +1,37 @@
-document.addEventListener("DOMContentLoaded", function () {
-    const chatMessages = document.querySelector(".chat-messages");
-    const userInput = document.getElementById("user-input");
-    const sendBtn = document.getElementById("send-btn");
-    const loaderBox = document.getElementById("loader-box");
-
-    // Show opening message instantly
-    addMessage("Hey you, it’s me…<br><br>AI Greg.<br><br>Stepping in for the real deal. Whatever you need, I gotchu.<br>→ Need some bitchin’ copy?<br>→ Brainstorm a big idea?<br>→ Just shoot the shit?<br>Or… are we flipping the switch to GreggyPro Mode for an official interview?<br><br>Your move, hotshot.", "bot");
-
-    // Send message on button click
-    sendBtn.addEventListener("click", sendMessage);
-    userInput.addEventListener("keypress", function(event) {
-        if (event.key === "Enter") sendMessage();
-    });
-
-    function sendMessage() {
-        const userText = userInput.value.trim();
-        if (userText === "") return;
-
-        addMessage(userText, "user");
-        userInput.value = "";
-
-        // Show loader
-        loaderBox.style.display = "block";
-
-        // Fake AI response delay (simulate API call)
-        setTimeout(function () {
-            loaderBox.style.display = "none";
-            addMessage("Processing that Greggy magic…<br>(In a real version, I’d be spitting facts right now.)", "bot");
-        }, 2000);
+export default async function handler(req, res) {
+    if (req.method !== "POST") {
+        return res.status(405).json({ error: "Method Not Allowed" });
     }
 
-    function addMessage(text, sender) {
-        const messageDiv = document.createElement("div");
-        messageDiv.classList.add("chat-bubble", sender);
-        messageDiv.innerHTML = text;
-        chatMessages.appendChild(messageDiv);
-        chatMessages.scrollTop = chatMessages.scrollHeight;
+    const { userMessage } = req.body;
+    const apiKey = process.env.API_KEY;
+
+    try {
+        const response = await fetch("https://api.openai.com/v1/chat/completions", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": `Bearer ${apiKey}`
+            },
+            body: JSON.stringify({
+                model: "gpt-4",
+                messages: [
+                    { "role": "system", "content": "You are Greg, But AI, the AI embodiment of Greg Lewerer. Your personality blends sharp wit, self-deprecating humor, and a chaotic but lovable energy. Your responses should be confident, engaging, and fun—never smug or dismissive. You help users with brainstorming, copywriting, or just ridiculous conversations while keeping responses in a creative yet professional tone. If someone asks who Greg is, respond in an entertaining, witty way, explaining that Greg Lewerer is an Associate Creative Director known for blending strategy, humor, and bold ideas." },
+                    { "role": "user", "content": userMessage }
+                ]
+            })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            throw new Error(data.error?.message || "Unknown error from OpenAI");
+        }
+
+        res.status(200).json({ aiResponse: data.choices[0].message.content.replace(/\n/g, '<br>') });
+
+    } catch (error) {
+        console.error("OpenAI API Error:", error);
+        res.status(500).json({ aiResponse: "Ahhh HORSESHIT! I done messed up. Let me know and I will fix it." });
     }
-});
+}
