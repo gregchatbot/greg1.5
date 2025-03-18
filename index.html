@@ -13,14 +13,26 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             height: 100vh;
-            background: url('https://i.postimg.cc/vBr8SRnM/AI-Greg-responsive-Background-Chat-FF.png') no-repeat center center/cover;
+            background: url('https://i.postimg.cc/LsdtxsNW/Blue-Stary-Background.png') no-repeat center center/cover;
             font-family: 'Montserrat', sans-serif;
             line-height: 1.25;
         }
 
-        /* Header Image */
+        /* Sticky Header */
+        .header-container {
+            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            background-color: rgba(0, 0, 0, 0.6); /* Slight transparent black */
+            backdrop-filter: blur(5px);
+            text-align: center;
+            padding: 10px 0;
+            z-index: 1000;
+        }
+
         .header-container img {
             max-width: 100%;
             height: auto;
@@ -32,17 +44,17 @@
             max-width: 600px;
             height: 500px;
             border-radius: 30px;
-            background: rgba(255, 255, 255, 0.1); /* Transparent White */
-            backdrop-filter: blur(12px); /* Blur Effect */
-            -webkit-backdrop-filter: blur(12px); /* Safari Support */
-            border: 1px solid rgba(255, 255, 255, 0.2); /* Subtle Border */
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 20px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             overflow: hidden;
             position: relative;
-            margin-top: 20px;
+            margin-top: 100px; /* Adjusted for sticky header */
         }
 
         /* Chat Box */
@@ -50,7 +62,7 @@
             flex-grow: 1;
             overflow-y: auto;
             padding: 10px;
-            color: #ffffff;
+            color: #646774;
             display: flex;
             flex-direction: column;
         }
@@ -62,7 +74,7 @@
             padding: 12px 18px;
             margin: 12px 0;
             background: rgba(255, 255, 255, 0.2);
-            color: #ffffff;
+            color: #646774;
             font-size: 16px;
             border-radius: 15px;
             backdrop-filter: blur(8px);
@@ -77,7 +89,7 @@
             max-width: 75%;
             padding: 10px 0;
             margin: 12px 0;
-            color: #ffffff;
+            color: #646774;
             font-size: 16px;
             display: block;
             word-wrap: break-word;
@@ -105,6 +117,40 @@
             50% { transform: scale(1.2); opacity: 1; }
             100% { transform: scale(1); opacity: 0.7; }
         }
+
+        /* Chat Input Field & Send Button */
+        .input-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 12px;
+            border-radius: 20px;
+            border: none;
+            background: rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(5px);
+            color: #646774;
+            font-size: 16px;
+            outline: none;
+        }
+
+        .send-button {
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            padding: 12px 18px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: 0.3s ease-in-out;
+        }
+
+        .send-button:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
     </style>
 </head>
 <body>
@@ -114,7 +160,10 @@
 
     <div class="chat-container">
         <div class="chat-box" id="chat-box"></div>
-        <input type="text" class="chat-input" id="chat-input" placeholder="Type a message...">
+        <div class="input-container">
+            <input type="text" class="chat-input" id="chat-input" placeholder="Type a message...">
+            <button class="send-button" id="send-button">➤</button>
+        </div>
     </div>
 
     <script>
@@ -126,6 +175,7 @@
                 headerImg.src = "https://i.postimg.cc/zBF5FCmG/AIGreg-Desktopheader-FF2.png";
             }
         }
+
         window.onload = function () {
             updateHeaderImage();
             let chatBox = document.getElementById('chat-box');
@@ -134,47 +184,44 @@
 
         window.onresize = updateHeaderImage;
 
-        document.getElementById('chat-input').addEventListener('keypress', function(event) {
-            if (event.key === 'Enter' && this.value.trim() !== '') {
-                let userMessage = this.value.trim();
-                let chatBox = document.getElementById('chat-box');
+        function sendMessage() {
+            let chatInput = document.getElementById('chat-input');
+            let userMessage = chatInput.value.trim();
+            let chatBox = document.getElementById('chat-box');
 
-                let userBubble = document.createElement('div');
-                userBubble.classList.add('user-message');
-                userBubble.textContent = userMessage;
-                chatBox.appendChild(userBubble);
-                this.value = '';
+            if (userMessage === '') return;
+
+            let userBubble = document.createElement('div');
+            userBubble.classList.add('user-message');
+            userBubble.textContent = userMessage;
+            chatBox.appendChild(userBubble);
+            chatInput.value = '';
+            chatBox.scrollTop = chatBox.scrollHeight;
+
+            let loader = document.createElement('div');
+            loader.classList.add('loader');
+            loader.innerHTML = `<img src="https://i.postimg.cc/8Pz7CN73/Greg-Fresh-Smoke.png" alt="Thinking...">`;
+            chatBox.appendChild(loader);
+
+            fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userMessage })
+            })
+            .then(response => response.json())
+            .then(data => {
+                chatBox.removeChild(loader);
+                let aiMessage = document.createElement('div');
+                aiMessage.classList.add('ai-message');
+                aiMessage.innerHTML = `<strong>Greg, But AI:</strong> <br>` + data.aiResponse.replace(/\n/g, '<br><br>');
+                chatBox.appendChild(aiMessage);
                 chatBox.scrollTop = chatBox.scrollHeight;
+            });
+        }
 
-                let loader = document.createElement('div');
-                loader.classList.add('loader');
-                loader.innerHTML = `<img src="https://i.postimg.cc/8Pz7CN73/Greg-Fresh-Smoke.png" alt="Thinking...">`;
-                chatBox.appendChild(loader);
-
-                fetch('/api/chat', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ userMessage: userMessage })
-                })
-                .then(response => response.json())
-                .then(data => {
-                    chatBox.removeChild(loader);
-                    let aiResponse = data.aiResponse || "Hmm, something went wrong. Operator error? That means you.";
-                    let aiMessage = document.createElement('div');
-                    aiMessage.classList.add('ai-message');
-                    aiMessage.innerHTML = `<strong>Greg, But AI:</strong> <br>` + aiResponse.replace(/\n/g, '<br><br>');
-                    chatBox.appendChild(aiMessage);
-                    chatBox.scrollTop = chatBox.scrollHeight;
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    chatBox.removeChild(loader);
-                    let aiMessage = document.createElement('div');
-                    aiMessage.classList.add('ai-message');
-                    aiMessage.innerHTML = `<strong>Greg, But AI:</strong> Ahhh HORSESHIT! I done messed up. Let me know and I will fix it.`;
-                    chatBox.appendChild(aiMessage);
-                });
-            }
+        document.getElementById('send-button').addEventListener('click', sendMessage);
+        document.getElementById('chat-input').addEventListener('keypress', (event) => {
+            if (event.key === 'Enter') sendMessage();
         });
     </script>
 </body>
