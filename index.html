@@ -6,7 +6,6 @@
     <title>AI Greg</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        /* Reset Page Margins */
         html, body {
             margin: 0;
             padding: 0;
@@ -23,14 +22,12 @@
             justify-content: center;
         }
 
-        /* Mobile Background */
         @media (max-width: 768px) {
             body {
                 background: url('https://i.postimg.cc/KjR5JPqy/Tuesday-Mobile-Back.png') no-repeat center center/cover;
             }
         }
 
-        /* Sticky Transparent Header */
         .header-container {
             width: 100%;
             position: fixed;
@@ -48,14 +45,12 @@
             margin: 10px auto;
         }
 
-        /* Responsive Header for Mobile */
         @media (max-width: 768px) {
             .header-container img {
-                max-width: 300px; /* Smaller logo for mobile */
+                max-width: 300px;
             }
         }
 
-        /* Glassmorphism Chat Container */
         .chat-container {
             width: 80%;
             max-width: 600px;
@@ -65,26 +60,24 @@
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 20px;
+            padding: 15px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             overflow: hidden;
             position: relative;
-            margin: 140px auto 0 auto;
+            margin: 120px auto 0 auto;
             left: 0;
             right: 0;
         }
 
-        /* Mobile-specific chat container adjustments */
         @media (max-width: 768px) {
             .chat-container {
-                margin: 100px auto 0 auto; /* Less margin for mobile */
-                height: 70vh; /* Adjust height for better fit */
+                margin: 80px auto 0 auto;
+                height: 75vh;
             }
         }
 
-        /* Chat Box */
         .chat-box {
             flex-grow: 1;
             overflow-y: auto;
@@ -94,12 +87,11 @@
             flex-direction: column;
         }
 
-        /* User Message Bubble */
         .user-message {
             width: fit-content;
             max-width: 75%;
             padding: 12px 18px;
-            margin: 12px 0;
+            margin: 8px 0;
             background: rgba(255, 255, 255, 0.2);
             color: #646774;
             font-size: 16px;
@@ -108,22 +100,22 @@
             border: 1.5px solid rgba(255, 255, 255, 0.3);
             word-wrap: break-word;
             align-self: flex-end;
+            line-height: 1.4;
         }
 
-        /* AI Response */
         .ai-message {
             width: 100%;
             max-width: 90%;
-            padding: 10px 0;
-            margin: 12px 0;
+            padding: 8px 0;
+            margin: 8px 0;
             color: #646774;
             font-size: 16px;
             display: block;
             word-wrap: break-word;
             align-self: flex-start;
+            line-height: 1.4;
         }
 
-        /* Loader */
         .loader {
             width: 30px;
             height: 30px;
@@ -145,18 +137,18 @@
             100% { transform: scale(1); opacity: 0.7; }
         }
 
-        /* Chat Input Field & Send Button */
         .input-container {
             display: flex;
             align-items: center;
-            gap: 10px;
+            justify-content: center;
             padding: 10px;
             position: sticky;
             bottom: 0;
             width: 100%;
             background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(15px);
             border-radius: 20px;
+            gap: 5px;
         }
 
         .chat-input {
@@ -169,17 +161,19 @@
             color: #646774;
             font-size: 16px;
             outline: none;
+            width: 80%;
+            text-align: left;
         }
 
         .send-button {
             background: none;
             border: none;
-            padding: 0;
             cursor: pointer;
             transition: 0.3s ease-in-out;
             display: flex;
             align-items: center;
             justify-content: center;
+            width: 50px;
         }
 
         .send-button:hover {
@@ -187,7 +181,7 @@
         }
 
         .send-icon {
-            width: 40px; /* Adjust size as needed */
+            width: 40px;
             height: auto;
         }
     </style>
