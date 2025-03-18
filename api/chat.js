@@ -4,8 +4,7 @@ export default async function handler(req, res) {
     }
 
     const { userMessage } = req.body;
-    const apiKey = process.env.OPENAI_API_KEY;
-    const assistantId = process.env.OPENAI_ASSISTANT_ID;  // If using Assistants API
+    const apiKey = process.env.API_KEY;
 
     try {
         const response = await fetch("https://api.openai.com/v1/chat/completions", {
