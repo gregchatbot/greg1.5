@@ -61,7 +61,7 @@
             flex-direction: column;
             justify-content: space-between;
             overflow: hidden;
-            margin: 140px auto 0 auto;
+            margin: 120px auto 0 auto;
         }
 
         @media (max-width: 768px) {
@@ -188,6 +188,7 @@
     <script>
     window.onload = function () {
         let chatBox = document.getElementById('chat-box');
+        document.getElementById('chat-input').focus(); // Auto-focus on load
         chatBox.innerHTML += `
             <div class="ai-message">
                 <b>WELCOME TO THE THUNDERDOME!</b><br><br>
@@ -198,7 +199,9 @@
         `;
     };
 
-    function sendMessage() {
+    async function sendMessage(event) {
+        event.preventDefault(); // Prevents multiple "Enter" presses from triggering
+
         let chatInput = document.getElementById('chat-input');
         let userMessage = chatInput.value.trim();
         let chatBox = document.getElementById('chat-box');
@@ -217,19 +220,31 @@
         loader.innerHTML = `<img src="https://i.postimg.cc/8Pz7CN73/Greg-Fresh-Smoke.png" alt="Thinking...">`;
         chatBox.appendChild(loader);
 
-        setTimeout(() => {
+        try {
+            let response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userMessage })
+            });
+
+            let data = await response.json();
             chatBox.removeChild(loader);
+
             let aiMessage = document.createElement('div');
             aiMessage.classList.add('ai-message');
-            aiMessage.innerHTML = `<strong>AI Greg:</strong> Haha, nice move! What's next?`;
+            aiMessage.innerHTML = `<strong>AI Greg:</strong> <br>` + (data.aiResponse || "I didn't catch that. Try again.");
             chatBox.appendChild(aiMessage);
             chatBox.scrollTop = chatBox.scrollHeight;
-        }, 2000);
+
+        } catch (error) {
+            chatBox.removeChild(loader);
+            chatBox.innerHTML += `<div class="ai-message"><strong>AI Greg:</strong> Sorry, something went wrong. Try again.</div>`;
+        }
     }
 
     document.getElementById('send-button').addEventListener('click', sendMessage);
     document.getElementById('chat-input').addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') sendMessage();
+        if (event.key === 'Enter') sendMessage(event);
     });
     </script>
 </body>
