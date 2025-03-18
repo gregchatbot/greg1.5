@@ -61,12 +61,12 @@
             flex-direction: column;
             justify-content: space-between;
             overflow: hidden;
-            margin: 120px auto 0 auto;
+            margin: 140px auto 0 auto;
         }
 
         @media (max-width: 768px) {
             .chat-container {
-                margin: 100px auto 0 auto;
+                margin: 160px auto 0 auto; /* Increased space on mobile */
                 height: 60vh;
             }
         }
@@ -188,7 +188,7 @@
     <script>
     window.onload = function () {
         let chatBox = document.getElementById('chat-box');
-        document.getElementById('chat-input').focus(); // Auto-focus on load
+        document.getElementById('chat-input').focus();
         chatBox.innerHTML += `
             <div class="ai-message">
                 <b>WELCOME TO THE THUNDERDOME!</b><br><br>
@@ -200,7 +200,7 @@
     };
 
     async function sendMessage(event) {
-        event.preventDefault(); // Prevents multiple "Enter" presses from triggering
+        event.preventDefault();
 
         let chatInput = document.getElementById('chat-input');
         let userMessage = chatInput.value.trim();
