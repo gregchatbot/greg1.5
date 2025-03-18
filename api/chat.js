@@ -26,7 +26,7 @@ document.addEventListener("DOMContentLoaded", function () {
         // Fake AI response delay (simulate API call)
         setTimeout(function () {
             loaderBox.style.display = "none";
-            addMessage("🔥 Processing that Greggy magic…<br>(In a real version, I’d be spitting facts right now.)", "bot");
+            addMessage("Processing that Greggy magic…<br>(In a real version, I’d be spitting facts right now.)", "bot");
         }, 2000);
     }
 
