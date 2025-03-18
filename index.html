@@ -6,7 +6,6 @@
     <title>AI Greg</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
-        /* Reset Page Margins */
         html, body {
             margin: 0;
             padding: 0;
@@ -14,23 +13,18 @@
             height: 100vh;
             overflow: hidden;
             font-family: 'Montserrat', sans-serif;
-            line-height: 1.25;
             background: url('https://i.postimg.cc/k471FtPn/3tuesdaybackground.png') no-repeat center center/cover;
-            transition: background 0.5s ease-in-out;
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
         }
 
-        /* Mobile Background */
         @media (max-width: 768px) {
             body {
                 background: url('https://i.postimg.cc/KjR5JPqy/Tuesday-Mobile-Back.png') no-repeat center center/cover;
             }
         }
 
-        /* Sticky Transparent Header */
         .header-container {
             width: 100%;
             position: fixed;
@@ -48,146 +42,85 @@
             margin: 10px auto;
         }
 
-        /* Responsive Header for Mobile */
         @media (max-width: 768px) {
             .header-container img {
-                max-width: 300px; /* Smaller logo for mobile */
+                max-width: 300px;
             }
         }
 
-        /* Glassmorphism Chat Container */
         .chat-container {
             width: 80%;
             max-width: 600px;
-            height: 500px;
+            min-height: 65vh;
+            max-height: 75vh;
             border-radius: 30px;
             background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
+            backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             padding: 20px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             overflow: hidden;
-            position: relative;
             margin: 160px auto 0 auto;
-            left: 0;
-            right: 0;
         }
 
-        /* Mobile-specific chat container adjustments */
-        @media (max-width: 768px) {
-            .chat-container {
-                margin: 100px auto 0 auto; /* Less margin for mobile */
-                height: 70vh; /* Adjust height for better fit */
-            }
-        }
-
-        /* Chat Box */
         .chat-box {
             flex-grow: 1;
             overflow-y: auto;
-            padding: 10px;
+            padding: 15px;
             color: #646774;
             display: flex;
             flex-direction: column;
         }
 
-        /* User Message Bubble */
-        .user-message {
-            width: fit-content;
-            max-width: 75%;
-            padding: 12px 18px;
-            margin: 12px 0;
-            background: rgba(255, 255, 255, 0.2);
-            color: #646774;
-            font-size: 16px;
-            border-radius: 15px;
-            backdrop-filter: blur(8px);
-            border: 1.5px solid rgba(255, 255, 255, 0.3);
-            word-wrap: break-word;
-            align-self: flex-end;
-        }
-
-        /* AI Response */
-        .ai-message {
-            width: 100%;
-            max-width: 90%;
-            padding: 10px 0;
-            margin: 12px 0;
-            color: #646774;
-            font-size: 16px;
-            display: block;
-            word-wrap: break-word;
-            align-self: flex-start;
-        }
-
-        /* Loader */
-        .loader {
-            width: 40px;
-            height: 40px;
-            position: relative;
-            margin-top: 10px;
-            align-self: flex-start;
-        }
-
-        .loader img {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            animation: pulse 1.2s infinite ease-in-out;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); opacity: 0.7; }
-            50% { transform: scale(1.2); opacity: 1; }
-            100% { transform: scale(1); opacity: 0.7; }
-        }
-
-        /* Chat Input Field & Send Button */
         .input-container {
             display: flex;
             align-items: center;
-            gap: 10px;
             padding: 10px;
-            position: sticky;
-            bottom: 0;
-            width: 100%;
-            background: rgba(255, 255, 255, 0.6);
-            backdrop-filter: blur(8px);
+            position: fixed;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 600px;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
             border-radius: 20px;
+            gap: 5px;
         }
 
-        .chat-input {
+        textarea.chat-input {
             flex: 1;
             padding: 12px;
             border-radius: 20px;
             border: none;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.5);
             backdrop-filter: blur(5px);
             color: #646774;
             font-size: 16px;
             outline: none;
+            resize: none;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-y: hidden;
+            min-height: 40px;
+            max-height: 150px;
         }
 
         .send-button {
             background: none;
             border: none;
-            padding: 0;
             cursor: pointer;
-            transition: 0.3s ease-in-out;
             display: flex;
             align-items: center;
             justify-content: center;
-        }
-
-        .send-button:hover {
-            opacity: 0.8;
+            width: 60px;
+            height: 60px;
         }
 
         .send-icon {
-            width: 40px; /* Adjust size as needed */
+            width: 40px;
             height: auto;
         }
     </style>
@@ -200,7 +133,7 @@
     <div class="chat-container">
         <div class="chat-box" id="chat-box"></div>
         <div class="input-container">
-            <input type="text" class="chat-input" id="chat-input" placeholder="Type a message...">
+            <textarea class="chat-input" id="chat-input" placeholder="Type a message..." rows="1"></textarea>
             <button class="send-button" id="send-button">
                 <img src="https://i.postimg.cc/4dd4dPNt/4458496.png" alt="Send" class="send-icon">
             </button>
@@ -210,9 +143,12 @@
     <script>
     window.onload = function () {
         let chatBox = document.getElementById('chat-box');
+        setTimeout(() => {
+            document.getElementById('chat-input').focus();
+        }, 300);
         chatBox.innerHTML += `
             <div class="ai-message">
-                🔥 <b>WELCOME TO THE THUNDERDOME!</b> 🔥<br><br>
+                <b>WELCOME TO THE THUNDERDOME!</b><br><br>
                 I’ll be your Greg Lewerer stand-in today. What kind of trouble are we getting into?<br><br>
                 Are we shaping history, shootin’ the shit, or flipping the switch to GreggyPro Mode for an official interview?<br><br>
                 Your move, hotshot.
@@ -220,7 +156,9 @@
         `;
     };
 
-    function sendMessage() {
+    async function sendMessage(event) {
+        if (event) event.preventDefault();
+
         let chatInput = document.getElementById('chat-input');
         let userMessage = chatInput.value.trim();
         let chatBox = document.getElementById('chat-box');
@@ -239,26 +177,41 @@
         loader.innerHTML = `<img src="https://i.postimg.cc/8Pz7CN73/Greg-Fresh-Smoke.png" alt="Thinking...">`;
         chatBox.appendChild(loader);
 
-        fetch('/api/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ userMessage })
-        })
-        .then(response => response.json())
-        .then(data => {
+        try {
+            let response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userMessage })
+            });
+
+            if (!response.ok) throw new Error("Network response was not ok.");
+            let data = await response.json();
             chatBox.removeChild(loader);
+
             let aiMessage = document.createElement('div');
             aiMessage.classList.add('ai-message');
-            aiMessage.innerHTML = `<strong>AI Greg:</strong> <br>` + data.aiResponse.replace(/\n/g, '<br><br>');
+            aiMessage.innerHTML = `<strong>AI Greg:</strong> <br>` + (data.aiResponse || "AI Greg is thinking too hard. Try again.");
             chatBox.appendChild(aiMessage);
             chatBox.scrollTop = chatBox.scrollHeight;
-        });
+
+        } catch (error) {
+            chatBox.removeChild(loader);
+            chatBox.innerHTML += `<div class="ai-message"><strong>AI Greg:</strong> Oops, something went wrong. Try again.</div>`;
+        }
     }
 
     document.getElementById('send-button').addEventListener('click', sendMessage);
     document.getElementById('chat-input').addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') sendMessage();
+        if (event.key === 'Enter' && !event.shiftKey) {
+            event.preventDefault();
+            sendMessage(event);
+        }
     });
-</script>
+
+    document.getElementById('chat-input').addEventListener('input', function () {
+        this.style.height = 'auto';
+        this.style.height = this.scrollHeight + 'px';
+    });
+    </script>
 </body>
 </html>
