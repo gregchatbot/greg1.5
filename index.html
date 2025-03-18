@@ -3,32 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Greg</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Greg, But AI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* General Styles */
+        body {
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            background-color: #2e333a;
+            font-family: 'Montserrat', sans-serif;
+            line-height: 1.25;
+        }
+
+        /* Header Image */
+        .header-container img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        /* Chat Container */
+        .chat-container {
+            width: 80%;
+            max-width: 600px;
+            height: 500px;
+            border-radius: 30px;
+            background: #2e333a;
+            box-shadow: rgba(50, 50, 93, 0.25) 0px 30px 50px -12px inset, 
+                        rgba(0, 0, 0, 0.3) 0px 18px 26px -18px inset;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            overflow: hidden;
+            position: relative;
+            margin-top: 20px;
+        }
+
+        /* Chat Box */
+        .chat-box {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px;
+            color: #ffffff;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* User Message Bubble */
+        .user-message {
+            width: fit-content;
+            max-width: 75%;
+            padding: 12px 18px;
+            margin: 12px 0;
+            background-color: #a5aeb5;
+            color: #ffffff;
+            font-size: 16px;
+            border-radius: 15px;
+            box-shadow: 6px 6px 12px #24282d, -6px -6px 12px #3a414b;
+            border: 1.5px solid #a5aeb5;
+            word-wrap: break-word;
+            align-self: flex-end;
+        }
+
+        /* AI Response */
+        .ai-message {
+            width: 100%;
+            max-width: 75%;
+            padding: 10px 0;
+            margin: 12px 0;
+            color: #ffffff;
+            font-size: 16px;
+            display: block;
+            word-wrap: break-word;
+            align-self: flex-start;
+        }
+
+        /* Loader */
+        .loader {
+            width: 50px;
+            height: 50px;
+            position: relative;
+            margin-top: 10px;
+            align-self: flex-start;
+        }
+
+        .loader img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            animation: pulse 1.2s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 1; }
+            100% { transform: scale(1); opacity: 0.7; }
+        }
+    </style>
 </head>
 <body>
-
-    <!-- Chat Container -->
-    <div id="chat-page" class="chat-container">
-        <div class="chat-messages"></div>
-
-        <!-- AI Response Loader (Hidden Until Needed) -->
-        <div id="loader-box" class="loader-box">
-            <div class="loading-wrapper">
-                <div class="loader">
-                    <div class="loader-inner"></div>
-                </div>
-            </div>
-            <img src="https://i.postimg.cc/8Pz7CN73/Greg-Fresh-Smoke.png" alt="AI Greg Thinking" class="loader-face">
-        </div>
-
-        <!-- Chat Input -->
-        <div class="chat-input-container">
-            <input type="text" id="user-input" placeholder="Type your message..." autofocus>
-            <button id="send-btn">Send</button>
-        </div>
+    <div class="header-container">
+        <img id="header-image" src="https://i.postimg.cc/zBF5FCmG/AIGreg-Desktopheader-FF2.png" alt="Greg, But AI Header">
     </div>
 
-    <script src="chat.js"></script>
+    <div class="chat-container">
+        <div class="chat-box" id="chat-box"></div>
+        <input type="text" class="chat-input" id="chat-input" placeholder="Type a message...">
+    </div>
+
+    <script>
+        function updateHeaderImage() {
+            const headerImg = document.getElementById('header-image');
+            if (window.innerWidth <= 768) {
+                headerImg.src = "https://i.postimg.cc/ZnYm7WZF/Mobile-chat-headerthin-FF2.png";
+            } else {
+                headerImg.src = "https://i.postimg.cc/zBF5FCmG/AIGreg-Desktopheader-FF2.png";
+            }
+        }
+        window.onload = function () {
+            updateHeaderImage();
+            let chatBox = document.getElementById('chat-box');
+            chatBox.innerHTML += `<div class="ai-message"><strong>Greg, But AI:</strong> <br>WELCOME TO THE THUNDERDOME!<br><br>Are we shaping history, shootin’ the shit, or flipping the switch to GreggyPro Mode for an official interview?<br><br>Your move, hotshot.</div>`;
+        };
+
+        window.onresize = updateHeaderImage;
+
+        document.getElementById('chat-input').addEventListener('keypress', function(event) {
+            if (event.key === 'Enter' && this.value.trim() !== '') {
+                let userMessage = this.value.trim();
+                let chatBox = document.getElementById('chat-box');
+
+                let userBubble = document.createElement('div');
+                userBubble.classList.add('user-message');
+                userBubble.textContent = userMessage;
+                chatBox.appendChild(userBubble);
+                this.value = '';
+                chatBox.scrollTop = chatBox.scrollHeight;
+
+                let loader = document.createElement('div');
+                loader.classList.add('loader');
+                loader.innerHTML = `<img src="https://i.postimg.cc/8Pz7CN73/Greg-Fresh-Smoke.png" alt="Thinking...">`;
+                chatBox.appendChild(loader);
+
+                fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userMessage: userMessage })
+                })
+                .then(response => response.json())
+                .then(data => {
+                    chatBox.removeChild(loader);
+                    let aiResponse = data.aiResponse || "Hmm, something went wrong. Operator error? That means you.";
+                    let aiMessage = document.createElement('div');
+                    aiMessage.classList.add('ai-message');
+                    aiMessage.innerHTML = `<strong>Greg, But AI:</strong> <br>` + aiResponse.replace(/\n/g, '<br><br>');
+                    chatBox.appendChild(aiMessage);
+                    chatBox.scrollTop = chatBox.scrollHeight;
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    chatBox.removeChild(loader);
+                    let aiMessage = document.createElement('div');
+                    aiMessage.classList.add('ai-message');
+                    aiMessage.innerHTML = `<strong>Greg, But AI:</strong> Ahhh HORSESHIT! I done messed up. Let me know and I will fix it.`;
+                    chatBox.appendChild(aiMessage);
+                });
+            }
+        });
+    </script>
 </body>
 </html>
