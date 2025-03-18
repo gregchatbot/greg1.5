@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Greg, But AI</title>
+    <title>AI Greg</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
         /* Reset Page Margins */
@@ -162,27 +162,21 @@
             display: flex;
             align-items: center;
             justify-content: center;
-    }
-
-    .send-button:hover {
-        opacity: 0.8;
-    }
-
-    .send-icon {
-        width: 40px; /* Adjust size as needed */
-        height: auto;
-    }
         }
 
         .send-button:hover {
-            background: rgba(255, 255, 255, 0.5);
+            opacity: 0.8;
         }
 
+        .send-icon {
+            width: 40px; /* Adjust size as needed */
+            height: auto;
+        }
     </style>
 </head>
 <body>
     <div class="header-container">
-        <img id="header-image" src="https://i.postimg.cc/65PPJ3n0/AI-GREG-Header-RESP.png" alt="Greg, But AI Header">
+        <img id="header-image" src="https://i.postimg.cc/65PPJ3n0/AI-GREG-Header-RESP.png" alt="AI Greg Header">
     </div>
 
     <div class="chat-container">
@@ -196,45 +190,57 @@
     </div>
 
     <script>
-        function sendMessage() {
-            let chatInput = document.getElementById('chat-input');
-            let userMessage = chatInput.value.trim();
-            let chatBox = document.getElementById('chat-box');
+    window.onload = function () {
+        let chatBox = document.getElementById('chat-box');
+        chatBox.innerHTML += `
+            <div class="ai-message">
+                🔥 <b>WELCOME TO THE THUNDERDOME!</b> 🔥<br><br>
+                I’ll be your Greg Lewerer stand-in today. What kind of trouble are we getting into?<br><br>
+                Are we shaping history, shootin’ the shit, or flipping the switch to GreggyPro Mode for an official interview?<br><br>
+                Your move, hotshot.
+            </div>
+        `;
+    };
 
-            if (userMessage === '') return;
+    function sendMessage() {
+        let chatInput = document.getElementById('chat-input');
+        let userMessage = chatInput.value.trim();
+        let chatBox = document.getElementById('chat-box');
 
-            let userBubble = document.createElement('div');
-            userBubble.classList.add('user-message');
-            userBubble.textContent = userMessage;
-            chatBox.appendChild(userBubble);
-            chatInput.value = '';
+        if (userMessage === '') return;
+
+        let userBubble = document.createElement('div');
+        userBubble.classList.add('user-message');
+        userBubble.textContent = userMessage;
+        chatBox.appendChild(userBubble);
+        chatInput.value = '';
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        let loader = document.createElement('div');
+        loader.classList.add('loader');
+        loader.innerHTML = `<img src="https://i.postimg.cc/8Pz7CN73/Greg-Fresh-Smoke.png" alt="Thinking...">`;
+        chatBox.appendChild(loader);
+
+        fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userMessage })
+        })
+        .then(response => response.json())
+        .then(data => {
+            chatBox.removeChild(loader);
+            let aiMessage = document.createElement('div');
+            aiMessage.classList.add('ai-message');
+            aiMessage.innerHTML = `<strong>AI Greg:</strong> <br>` + data.aiResponse.replace(/\n/g, '<br><br>');
+            chatBox.appendChild(aiMessage);
             chatBox.scrollTop = chatBox.scrollHeight;
-
-            let loader = document.createElement('div');
-            loader.classList.add('loader');
-            loader.innerHTML = `<img src="https://i.postimg.cc/8Pz7CN73/Greg-Fresh-Smoke.png" alt="Thinking...">`;
-            chatBox.appendChild(loader);
-
-            fetch('/api/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userMessage })
-            })
-            .then(response => response.json())
-            .then(data => {
-                chatBox.removeChild(loader);
-                let aiMessage = document.createElement('div');
-                aiMessage.classList.add('ai-message');
-                aiMessage.innerHTML = `<strong>Greg, But AI:</strong> <br>` + data.aiResponse.replace(/\n/g, '<br><br>');
-                chatBox.appendChild(aiMessage);
-                chatBox.scrollTop = chatBox.scrollHeight;
-            });
-        }
-
-        document.getElementById('send-button').addEventListener('click', sendMessage);
-        document.getElementById('chat-input').addEventListener('keypress', (event) => {
-            if (event.key === 'Enter') sendMessage();
         });
-    </script>
+    }
+
+    document.getElementById('send-button').addEventListener('click', sendMessage);
+    document.getElementById('chat-input').addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') sendMessage();
+    });
+</script>
 </body>
 </html>
