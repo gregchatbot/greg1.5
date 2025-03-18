@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Greg</title>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
     <style>
@@ -11,12 +11,12 @@
             padding: 0;
             width: 100%;
             height: 100vh;
+            overflow: hidden;
             font-family: 'Montserrat', sans-serif;
             background: url('https://i.postimg.cc/k471FtPn/3tuesdaybackground.png') no-repeat center center/cover;
             display: flex;
             flex-direction: column;
             align-items: center;
-            overflow: hidden;
         }
 
         @media (max-width: 768px) {
@@ -49,9 +49,9 @@
         }
 
         .chat-container {
-            width: 90%;
+            width: 80%;
             max-width: 600px;
-            height: calc(100vh - 180px); /* Auto height based on screen */
+            height: 60vh;
             border-radius: 30px;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(20px);
@@ -59,9 +59,16 @@
             padding: 20px;
             display: flex;
             flex-direction: column;
+            justify-content: space-between;
             overflow: hidden;
             margin: 140px auto 0 auto;
-            transition: height 0.3s ease-in-out;
+        }
+
+        @media (max-width: 768px) {
+            .chat-container {
+                margin: 160px auto 0 auto; /* Increased space on mobile */
+                height: 60vh;
+            }
         }
 
         .chat-box {
@@ -71,26 +78,29 @@
             color: #646774;
             display: flex;
             flex-direction: column;
-            scroll-behavior: smooth; /* Makes sure chat scrolls down smoothly */
-        }
-
-        .user-message, .ai-message {
-            max-width: 75%;
-            padding: 12px 18px;
-            margin: 10px 0;
-            border-radius: 15px;
-            word-wrap: break-word;
         }
 
         .user-message {
-            background: #007bff;
-            color: white;
+            max-width: 75%;
+            padding: 12px 18px;
+            margin: 10px 0;
+            background: rgba(255, 255, 255, 0.2);
+            color: #646774;
+            font-size: 16px;
+            border-radius: 15px;
+            backdrop-filter: blur(8px);
+            border: 1.5px solid rgba(255, 255, 255, 0.3);
+            word-wrap: break-word;
             align-self: flex-end;
         }
 
         .ai-message {
-            background: rgba(255, 255, 255, 0.8);
-            color: #333;
+            max-width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            color: #646774;
+            font-size: 16px;
+            word-wrap: break-word;
             align-self: flex-start;
         }
 
@@ -118,16 +128,15 @@
             align-items: center;
             padding: 10px;
             position: fixed;
-            bottom: 0;
+            bottom: 10px;
             left: 50%;
             transform: translateX(-50%);
             width: 90%;
             max-width: 600px;
-            background: rgba(255, 255, 255, 0.9);
+            background: rgba(255, 255, 255, 0.8);
             backdrop-filter: blur(12px);
             border-radius: 20px;
             gap: 5px;
-            transition: bottom 0.3s ease-in-out;
         }
 
         .chat-input {
@@ -136,20 +145,22 @@
             border-radius: 20px;
             border: none;
             background: rgba(255, 255, 255, 0.5);
+            backdrop-filter: blur(5px);
+            color: #646774;
             font-size: 16px;
             outline: none;
             resize: none;
             white-space: pre-wrap;
             word-wrap: break-word;
-            min-height: 40px;
-            max-height: 150px;
-            overflow-y: auto;
         }
 
         .send-button {
             background: none;
             border: none;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             width: 50px;
         }
 
@@ -161,13 +172,13 @@
 </head>
 <body>
     <div class="header-container">
-        <img src="https://i.postimg.cc/65PPJ3n0/AI-GREG-Header-RESP.png" alt="AI Greg Header">
+        <img id="header-image" src="https://i.postimg.cc/65PPJ3n0/AI-GREG-Header-RESP.png" alt="AI Greg Header">
     </div>
 
-    <div class="chat-container" id="chat-container">
+    <div class="chat-container">
         <div class="chat-box" id="chat-box"></div>
-        <div class="input-container" id="input-container">
-            <textarea class="chat-input" id="chat-input" placeholder="Type a message..." rows="1"></textarea>
+        <div class="input-container">
+            <input type="text" class="chat-input" id="chat-input" placeholder="Type a message...">
             <button class="send-button" id="send-button">
                 <img src="https://i.postimg.cc/4dd4dPNt/4458496.png" alt="Send" class="send-icon">
             </button>
@@ -175,16 +186,22 @@
     </div>
 
     <script>
-    document.getElementById('chat-input').addEventListener('focus', () => {
-        document.getElementById('chat-container').style.height = "calc(100vh - 250px)";
-    });
-
-    document.getElementById('chat-input').addEventListener('blur', () => {
-        document.getElementById('chat-container').style.height = "calc(100vh - 180px)";
-    });
+    window.onload = function () {
+        let chatBox = document.getElementById('chat-box');
+        document.getElementById('chat-input').focus();
+        chatBox.innerHTML += `
+            <div class="ai-message">
+                <b>WELCOME TO THE THUNDERDOME!</b><br><br>
+                I’ll be your Greg Lewerer stand-in today. What kind of trouble are we getting into?<br><br>
+                Are we shaping history, shootin’ the shit, or flipping the switch to GreggyPro Mode for an official interview?<br><br>
+                Your move, hotshot.
+            </div>
+        `;
+    };
 
     async function sendMessage(event) {
         event.preventDefault();
+
         let chatInput = document.getElementById('chat-input');
         let userMessage = chatInput.value.trim();
         let chatBox = document.getElementById('chat-box');
@@ -215,17 +232,20 @@
 
             let aiMessage = document.createElement('div');
             aiMessage.classList.add('ai-message');
-            aiMessage.innerHTML = `<strong>AI Greg:</strong> <br>` + (data.aiResponse || "Try again.");
+            aiMessage.innerHTML = `<strong>AI Greg:</strong> <br>` + (data.aiResponse || "I didn't catch that. Try again.");
             chatBox.appendChild(aiMessage);
             chatBox.scrollTop = chatBox.scrollHeight;
 
         } catch (error) {
             chatBox.removeChild(loader);
-            chatBox.innerHTML += `<div class="ai-message"><strong>AI Greg:</strong> Error.</div>`;
+            chatBox.innerHTML += `<div class="ai-message"><strong>AI Greg:</strong> Sorry, something went wrong. Try again.</div>`;
         }
     }
 
     document.getElementById('send-button').addEventListener('click', sendMessage);
+    document.getElementById('chat-input').addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') sendMessage(event);
+    });
     </script>
 </body>
 </html>
