@@ -51,7 +51,7 @@
         .chat-container {
             width: 80%;
             max-width: 600px;
-            height: 60vh;
+            height: 70vh; /* Increased height for better spacing */
             border-radius: 30px;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(20px);
@@ -59,25 +59,22 @@
             padding: 20px;
             display: flex;
             flex-direction: column;
-            justify-content: space-between;
+            justify-content: flex-start;
             overflow: hidden;
             margin: 140px auto 0 auto;
-        }
-
-        @media (max-width: 768px) {
-            .chat-container {
-                margin: 160px auto 0 auto; /* Increased space on mobile */
-                height: 60vh;
-            }
+            position: relative;
         }
 
         .chat-box {
             flex-grow: 1;
-            overflow-y: auto;
+            overflow-y: auto; /* Ensures scrolling works */
             padding: 15px;
             color: #646774;
             display: flex;
             flex-direction: column;
+            max-height: calc(70vh - 80px); /* Prevents overflow beyond available space */
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
         }
 
         .user-message {
@@ -137,6 +134,7 @@
             backdrop-filter: blur(12px);
             border-radius: 20px;
             gap: 5px;
+            z-index: 1000;
         }
 
         .chat-input {
@@ -167,6 +165,17 @@
         .send-icon {
             width: 40px;
             height: auto;
+        }
+
+        @media (max-width: 768px) {
+            .chat-container {
+                height: 65vh;
+                margin: 120px auto 0 auto;
+            }
+
+            .chat-box {
+                max-height: calc(65vh - 80px);
+            }
         }
     </style>
 </head>
@@ -213,38 +222,19 @@
         userBubble.textContent = userMessage;
         chatBox.appendChild(userBubble);
         chatInput.value = '';
-        chatBox.scrollTop = chatBox.scrollHeight;
+
+        setTimeout(() => {
+            chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: 'smooth' });
+        }, 100);
 
         let loader = document.createElement('div');
         loader.classList.add('loader');
         loader.innerHTML = `<img src="https://i.postimg.cc/8Pz7CN73/Greg-Fresh-Smoke.png" alt="Thinking...">`;
         chatBox.appendChild(loader);
-
-        try {
-            let response = await fetch('/api/chat', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userMessage })
-            });
-
-            let data = await response.json();
-            chatBox.removeChild(loader);
-
-            let aiMessage = document.createElement('div');
-            aiMessage.classList.add('ai-message');
-            aiMessage.innerHTML = `<strong>AI Greg:</strong> <br>` + (data.aiResponse || "I didn't catch that. Try again.");
-            chatBox.appendChild(aiMessage);
-            chatBox.scrollTop = chatBox.scrollHeight;
-
-        } catch (error) {
-            chatBox.removeChild(loader);
-            chatBox.innerHTML += `<div class="ai-message"><strong>AI Greg:</strong> Sorry, something went wrong. Try again.</div>`;
-        }
     }
 
-    document.getElementById('send-button').addEventListener('click', sendMessage);
-    document.getElementById('chat-input').addEventListener('keypress', (event) => {
-        if (event.key === 'Enter') sendMessage(event);
+    window.addEventListener('resize', () => {
+        document.getElementById('chat-box').style.maxHeight = `calc(${window.innerHeight * 0.7}px - 80px)`;
     });
     </script>
 </body>
