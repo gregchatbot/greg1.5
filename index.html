@@ -51,7 +51,7 @@
         .chat-container {
             width: 80%;
             max-width: 600px;
-            height: 70vh; /* Increased height for better spacing */
+            height: 70vh;
             border-radius: 30px;
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(20px);
@@ -59,7 +59,6 @@
             padding: 20px;
             display: flex;
             flex-direction: column;
-            justify-content: flex-start;
             overflow: hidden;
             margin: 140px auto 0 auto;
             position: relative;
@@ -67,12 +66,12 @@
 
         .chat-box {
             flex-grow: 1;
-            overflow-y: auto; /* Ensures scrolling works */
+            overflow-y: auto;
             padding: 15px;
             color: #646774;
             display: flex;
             flex-direction: column;
-            max-height: calc(70vh - 80px); /* Prevents overflow beyond available space */
+            max-height: calc(70vh - 80px);
             scrollbar-width: thin;
             scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
         }
@@ -166,17 +165,6 @@
             width: 40px;
             height: auto;
         }
-
-        @media (max-width: 768px) {
-            .chat-container {
-                height: 65vh;
-                margin: 120px auto 0 auto;
-            }
-
-            .chat-box {
-                max-height: calc(65vh - 80px);
-            }
-        }
     </style>
 </head>
 <body>
@@ -223,18 +211,38 @@
         chatBox.appendChild(userBubble);
         chatInput.value = '';
 
-        setTimeout(() => {
-            chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: 'smooth' });
-        }, 100);
-
         let loader = document.createElement('div');
         loader.classList.add('loader');
         loader.innerHTML = `<img src="https://i.postimg.cc/8Pz7CN73/Greg-Fresh-Smoke.png" alt="Thinking...">`;
         chatBox.appendChild(loader);
+
+        chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: 'smooth' });
+
+        try {
+            let response = await fetch('/api/chat', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userMessage })
+            });
+
+            let data = await response.json();
+            chatBox.removeChild(loader);
+
+            let aiMessage = document.createElement('div');
+            aiMessage.classList.add('ai-message');
+            aiMessage.innerHTML = `<strong>AI Greg:</strong> <br>` + (data.aiResponse || "I didn't catch that. Try again.");
+            chatBox.appendChild(aiMessage);
+            chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: 'smooth' });
+
+        } catch (error) {
+            chatBox.removeChild(loader);
+            chatBox.innerHTML += `<div class="ai-message"><strong>AI Greg:</strong> Sorry, something went wrong. Try again.</div>`;
+        }
     }
 
-    window.addEventListener('resize', () => {
-        document.getElementById('chat-box').style.maxHeight = `calc(${window.innerHeight * 0.7}px - 80px)`;
+    document.getElementById('send-button').addEventListener('click', sendMessage);
+    document.getElementById('chat-input').addEventListener('keypress', (event) => {
+        if (event.key === 'Enter') sendMessage(event);
     });
     </script>
 </body>
